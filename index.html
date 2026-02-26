@@ -107,7 +107,7 @@
 <!-- ───────────── CATEGORY BREAKDOWN ───────────── -->
 <h2>Issue Category Breakdown</h2>
 
-<p>The 608 delivery issue messages break down into these categories (a single message may match multiple categories):</p>
+<p>The 608 delivery issue messages break down into these categories based on which regex patterns matched each message's text. A single message may match multiple categories. These counts are <strong>derived from pattern matching</strong>, not a raw column in the source data &mdash; see Limitations.</p>
 
 <div style="margin: 1rem 0;">
   <div class="bar-row"><span class="bar-label">Unclaimed</span><div class="bar-track"><div class="bar-fill" style="width:100%">206</div></div><span class="bar-count">206</span></div>
@@ -135,32 +135,30 @@
   <tr><td>February 2026</td><td>121</td><td>19.9%</td></tr>
 </table>
 
-<p class="note">December peak is consistent with holiday shipping volume increases and postal system congestion.</p>
+<p class="note">December shows the highest volume. Cause is not confirmed by this data &mdash; seasonal patterns, shipping volume, or other factors would need to be validated with GTA Imaging shipping records.</p>
 
 <!-- ───────────── INBOX BREAKDOWN ───────────── -->
-<h2>By Front Inbox</h2>
-
-<table>
-  <tr><th>Inbox</th><th>Delivery Issues</th><th>Share</th></tr>
-  <tr><td>General</td><td>442</td><td>72.7%</td></tr>
-  <tr><td>United States</td><td>136</td><td>22.4%</td></tr>
-  <tr><td>Pending Follow-Up</td><td>22</td><td>3.6%</td></tr>
-  <tr><td>Send to Print</td><td>7</td><td>1.2%</td></tr>
-  <tr><td>Design</td><td>1</td><td>0.2%</td></tr>
-</table>
+<h2>Delivery Issues by Location / Inbox</h2>
+<div class="callout" style="border-left-color: #e67e22;">
+  <strong>Data Needed:</strong> Per-city or per-inbox delivery issue breakdown requires validated location data from GTA Imaging fulfillment records. The Front <code>inbox_name</code> field reflects internal routing, not delivery geography. Do not use for operational claims until cross-referenced with shipping data.
+</div>
 
 <!-- ───────────── TOP RECIPIENTS ───────────── -->
 <h2>Top Recipient Handles in Delivery Issues</h2>
 
 <table>
-  <tr><th>Recipient Handle</th><th>Messages</th><th>Notes</th></tr>
-  <tr><td><code>hello@gtaimaging.com</code></td><td>241</td><td>GTA Imaging (print lab / fulfillment partner) &mdash; high volume indicates most delivery coordination flows through this partner</td></tr>
-  <tr><td><code>postmaster@outlook.com</code></td><td>16</td><td>Bounce-back / undeliverable email notifications</td></tr>
-  <tr><td><code>kerilynn@totalimageworks.com</code></td><td>10</td><td>Total Image Works (fulfillment contact)</td></tr>
-  <tr><td><code>postmaster@lespros.qc.ca</code></td><td>9</td><td>Les Pros (Quebec fulfillment partner)</td></tr>
+  <tr><th>Recipient Handle</th><th>Messages</th><th>% of 608</th></tr>
+  <tr><td><code>hello@gtaimaging.com</code></td><td>241</td><td>39.6%</td></tr>
+  <tr><td><code>postmaster@outlook.com</code></td><td>16</td><td>2.6%</td></tr>
+  <tr><td><code>kerilynn@totalimageworks.com</code></td><td>10</td><td>1.6%</td></tr>
+  <tr><td><code>postmaster@lespros.qc.ca</code></td><td>9</td><td>1.5%</td></tr>
 </table>
 
-<p class="note">241 of 608 delivery issue messages (39.6%) involve GTA Imaging, suggesting this is the primary fulfillment partner handling shipping logistics.</p>
+<p class="note">These are the most frequent <code>recipient_handle</code> values among the 608 flagged messages. This reflects who Nuovo was emailing about delivery issues &mdash; it does not confirm the role or relationship of these recipients. Cross-reference with operations team to identify vendor roles.</p>
+
+<div class="callout" style="border-left-color: #e67e22;">
+  <strong>Next Step:</strong> Confirm with operations team which recipient handles correspond to fulfillment partners, carriers, or other vendors. This data shows message volume only &mdash; not vendor identity or role.
+</div>
 
 <!-- ───────────── REFERENCE EXAMPLES ───────────── -->
 <h2>Reference Examples by Category</h2>
@@ -253,6 +251,7 @@
 
 <ul style="margin: 0.75rem 0; padding-left: 1.5rem; font-size: 0.85rem;">
   <li><strong>Keyword-based, not LLM-based:</strong> Classification uses regex pattern matching on the <code>text</code> column. Indirect or nuanced delivery complaints (e.g., a client describing a problem without using typical keywords) may be missed.</li>
+  <li><strong>Category labels are derived, not raw data:</strong> The Issue Category Breakdown (Unclaimed, Non-Receipt, etc.) is produced by which regex patterns matched each message. These categories are not a column in the source Excel. A message may match multiple categories, so category counts sum to more than 608. Re-running the classifier will reproduce these counts, but they are not independently verifiable without manual review.</li>
   <li><strong>Quoted text stripping:</strong> Reply chains are stripped to avoid false positives, but aggressive stripping may occasionally remove relevant client text that appears after a quote block.</li>
   <li><strong>Both inbound and outbound included:</strong> The output includes Nuovo's outbound messages about delivery issues (e.g., redelivery coordination with GTA Imaging). Filter to <code>is_inbound = True</code> if only client-reported issues are needed.</li>
   <li><strong>Spot-check recommended:</strong> Recommend manually reviewing 20&ndash;30 random "Yes" and "No" rows to validate accuracy before using in production reporting.</li>
