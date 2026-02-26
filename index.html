@@ -80,13 +80,13 @@
   <div class="stat-card"><div class="val">40,967</div><div class="label">Messages Analyzed</div></div>
   <div class="stat-card"><div class="val">608</div><div class="label">Delivery Issues (Yes)</div></div>
   <div class="stat-card"><div class="val">1.48%</div><div class="label">Delivery Issue Rate</div></div>
-  <div class="stat-card"><div class="val">327</div><div class="label">Unique Conversations</div></div>
+  <div class="stat-card"><div class="val">~327</div><div class="label">Est. Unique Conversations*</div></div>
 </div>
 
 <div class="callout">
   <strong>Classification Task:</strong> Each message's <code>text</code> column was evaluated against the question: <em>"Does this message describe a problem with the delivery of a shipped album or print &mdash; such as delivery to the wrong address, lost in transit, stolen package, or returned to sender?"</em>
   <br><br>
-  <strong>Result:</strong> 608 of 40,967 messages (1.48%) were classified as <strong>Yes</strong> (delivery issue detected). These span 327 unique Front conversations.
+  <strong>Result:</strong> 608 of 40,967 messages (1.48%) were classified as <strong>Yes</strong> (delivery issue detected). These span an estimated ~327 unique Front conversations (based on distinct <code>conversation_id</code> values &mdash; see Limitations for caveats).
 </div>
 
 <!-- ───────────── METHODOLOGY ───────────── -->
@@ -256,7 +256,7 @@
   <li><strong>Quoted text stripping:</strong> Reply chains are stripped to avoid false positives, but aggressive stripping may occasionally remove relevant client text that appears after a quote block.</li>
   <li><strong>Both inbound and outbound included:</strong> The output includes Nuovo's outbound messages about delivery issues (e.g., redelivery coordination with GTA Imaging). Filter to <code>is_inbound = True</code> if only client-reported issues are needed.</li>
   <li><strong>Spot-check recommended:</strong> Recommend manually reviewing 20&ndash;30 random "Yes" and "No" rows to validate accuracy before using in production reporting.</li>
-  <li><strong>Multi-message conversations:</strong> A single delivery issue may span multiple messages in the same conversation. The 608 count is messages, not unique incidents. The 327 unique conversation count is a better proxy for unique delivery issues.</li>
+  <li><strong>Multi-message conversations:</strong> A single delivery issue may span multiple messages in the same conversation. The 608 count is messages, not unique incidents. The ~327 unique conversation count (distinct <code>conversation_id</code> values) is a better proxy for unique delivery issues, but is an <strong>estimate</strong> &mdash; a single client may open multiple conversations about the same issue (inflating the count), and some flagged conversations may be false positives. Validate against GTA Imaging fulfillment data for a definitive incident count.</li>
 </ul>
 
 <div class="footer">
