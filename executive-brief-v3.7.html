@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executive Brief v3.7 &mdash; Last-Mile Delivery Redesign | Nuovo Artistic Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a; --surface: #141414; --surface2: #1e1e1e; --border: #2a2a2a;
+  --gold: #c8a96e; --gold-dim: rgba(200,169,110,0.15);
+  --text: #e8e4dc; --text-dim: #8a8580; --text-bright: #f5f3ef;
+  --green: #4ade80; --red: #f87171; --yellow: #fbbf24; --blue: #60a5fa;
+  --purple: #a855f7;
+}
+[data-theme="light"] {
+  --bg: #f5f3ef; --surface: #ffffff; --surface2: #eae7e1; --border: #d4d0c8;
+  --gold: #8a6d3b; --gold-dim: rgba(138,109,59,0.1);
+  --text: #2c2c2c; --text-dim: #6b6560; --text-bright: #1a1a1a;
+  --green: #16a34a; --red: #dc2626; --yellow: #ca8a04; --blue: #2563eb;
+  --purple: #7c3aed;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+  padding: 2rem 1rem;
+  transition: background 0.3s, color 0.3s;
+}
+
+.container { max-width: 960px; margin: 0 auto; }
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--text-bright);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 1.8rem;
+  margin-bottom: 0.8rem;
+}
+h4 {
+  color: var(--text-bright);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+p { margin-bottom: 1rem; }
+strong { color: var(--text-bright); font-weight: 600; }
+em { font-style: italic; color: var(--text-dim); }
+a { color: var(--gold); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+/* Confidential Banner */
+.confidential-banner {
+  background: linear-gradient(135deg, rgba(200,169,110,0.12), rgba(200,169,110,0.04));
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-family: 'Inter', sans-serif;
+  color: var(--text-dim);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+}
+
+/* Meta Grid */
+.meta-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 0.4rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+.meta-grid .meta-label {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.meta-grid .meta-value {
+  color: var(--text);
+}
+.meta-grid .meta-value.version-text {
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-size: 0.88rem;
+}
+thead th {
+  background: var(--surface2);
+  color: var(--gold);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--border);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+tbody td {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody tr { background: var(--surface); }
+tbody tr:nth-child(even) { background: var(--surface2); }
+
+/* Stat Grid */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.2rem;
+  text-align: center;
+}
+.stat-card .stat-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+.stat-card .stat-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 0.4rem;
+  line-height: 1.3;
+}
+.stat-card.stat-green .stat-number { color: var(--green); }
+.stat-card.stat-red .stat-number { color: var(--red); }
+.stat-card.stat-blue .stat-number { color: var(--blue); }
+
+/* Callouts */
+.callout {
+  background: var(--gold-dim);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 6px 6px 0;
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+.callout-red {
+  background: rgba(248,113,113,0.08);
+  border-left: 3px solid var(--red);
+  border-radius: 0 6px 6px 0;
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+.callout-green {
+  background: rgba(74,222,128,0.08);
+  border-left: 3px solid var(--green);
+  border-radius: 0 6px 6px 0;
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+.callout-blue {
+  background: rgba(96,165,250,0.08);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 6px 6px 0;
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+/* Data Confidence Tags */
+.tag { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem; font-weight: 600; margin: 0 0.1rem; vertical-align: middle; font-family: 'Inter', sans-serif; }
+.tag-data { background: rgba(74,222,128,0.15); color: var(--green); }
+.tag-est { background: rgba(251,191,36,0.15); color: var(--yellow); }
+.tag-vendor { background: rgba(96,165,250,0.15); color: var(--blue); }
+.tag-derived { background: rgba(200,169,110,0.15); color: var(--gold); }
+.tag-entity { background: rgba(168,85,247,0.15); color: var(--purple); }
+
+/* Bar Chart */
+.bar-chart { margin: 1.5rem 0; }
+.bar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.82rem;
+}
+.bar-label {
+  width: 180px;
+  flex-shrink: 0;
+  text-align: right;
+  padding-right: 0.8rem;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.bar-track {
+  flex: 1;
+  background: var(--surface);
+  border-radius: 4px;
+  height: 26px;
+  position: relative;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding-left: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  transition: width 0.6s ease;
+}
+.bar-value {
+  margin-left: 0.6rem;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+/* Tier Headers */
+.tier-header {
+  padding: 1rem 1.2rem;
+  border-radius: 8px;
+  margin: 2rem 0 1rem 0;
+  border: 1px solid var(--border);
+}
+.tier-header.tier-1 { background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(74,222,128,0.03)); border-color: var(--green); }
+.tier-header.tier-2 { background: linear-gradient(135deg, rgba(96,165,250,0.1), rgba(96,165,250,0.03)); border-color: var(--blue); }
+.tier-header.tier-3 { background: linear-gradient(135deg, rgba(200,169,110,0.1), rgba(200,169,110,0.03)); border-color: var(--gold); }
+.tier-header h3 { margin-top: 0; }
+.tier-cost { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem; }
+
+/* Code Blocks */
+code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  background: var(--surface2);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.82rem;
+}
+
+/* Flow Diagram for Appendix D */
+.flow-diagram {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.flow-node {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+  min-width: 130px;
+  line-height: 1.3;
+  border: 2px solid;
+}
+.flow-node.gate { background: rgba(200,169,110,0.15); border-color: var(--gold); color: var(--gold); }
+.flow-node.blocked { background: rgba(248,113,113,0.1); border-color: var(--red); color: var(--red); }
+.flow-node.independent { background: rgba(74,222,128,0.1); border-color: var(--green); color: var(--green); }
+.flow-node .flow-owner { font-size: 0.68rem; font-weight: 400; color: var(--text-dim); margin-top: 0.2rem; }
+.flow-arrow {
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.flow-arrow-label {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  font-style: italic;
+  max-width: 120px;
+  text-align: center;
+}
+.flow-connection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  justify-content: center;
+}
+
+/* Likelihood/Impact indicators */
+.li-high { color: var(--red); font-weight: 700; }
+.li-medium { color: var(--yellow); font-weight: 600; }
+.li-low { color: var(--green); font-weight: 600; }
+
+/* Tier indicator dots */
+.tier-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+.tier-dot.tier-1-dot { background: var(--red); }
+.tier-dot.tier-2-dot { background: var(--yellow); }
+.tier-dot.tier-3-dot { background: var(--blue); }
+
+/* Theme Toggle */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 999;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background 0.3s, border-color 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.theme-toggle:hover { border-color: var(--gold); }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem 0 1rem;
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+.footer .cortex-badge {
+  display: inline-block;
+  background: var(--gold-dim);
+  color: var(--gold);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-top: 0.4rem;
+}
+
+/* List styling */
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { margin-bottom: 0.3rem; }
+
+/* Section number badges */
+.section-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: #0a0a0a;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body { padding: 1rem 0.5rem; font-size: 14px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.2rem; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .meta-grid { grid-template-columns: 130px 1fr; }
+  .bar-label { width: 120px; font-size: 0.75rem; }
+  table { font-size: 0.78rem; }
+  thead th, tbody td { padding: 0.4rem 0.5rem; }
+  .flow-diagram { padding: 1rem; }
+  .flow-node { min-width: 100px; font-size: 0.7rem; padding: 0.5rem 0.7rem; }
+}
+
+/* Print */
+@media print {
+  body { background: #fff; color: #000; font-size: 11pt; padding: 0; }
+  .theme-toggle { display: none; }
+  .container { max-width: 100%; }
+  h1 { color: #8a6d3b; }
+  h2 { color: #1a1a1a; border-bottom-color: #ccc; }
+  h3 { color: #8a6d3b; }
+  .confidential-banner { border-color: #8a6d3b; color: #8a6d3b; }
+  table { page-break-inside: avoid; }
+  thead th { background: #eee; color: #8a6d3b; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  tbody tr:nth-child(even) { background: #f5f5f5; }
+  .callout, .callout-red, .callout-green, .callout-blue { border-left-width: 3px; }
+  .stat-card { border-color: #ccc; }
+  .tag { border: 1px solid #ccc; }
+  .flow-node { border-width: 1px; }
+  hr { border-top-color: #ccc; }
+  a { color: #8a6d3b; }
+  .footer { color: #999; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"></button>
+
+<div class="container">
+
+<!-- Confidential Banner -->
+<div class="confidential-banner">Executive Brief &mdash; Confidential</div>
+
+<!-- Title -->
+<h1>Last-Mile Delivery Redesign</h1>
+<p class="subtitle">for Stainless Prints &mdash; Nuovo Artistic Studios</p>
+
+<!-- Meta Grid -->
+<div class="meta-grid">
+  <span class="meta-label">Date</span>
+  <span class="meta-value">February 25, 2026</span>
+  <span class="meta-label">Decision Required By</span>
+  <span class="meta-value">March 7, 2026</span>
+  <span class="meta-label">Prepared for</span>
+  <span class="meta-value">Jesse Pavey (CEO), Catherine Theoret (President)</span>
+  <span class="meta-label">Prepared by</span>
+  <span class="meta-value">Justin Kausel (Consultant)</span>
+  <span class="meta-label">Version</span>
+  <span class="meta-value version-text">3.7 &mdash; Updated: Entity resolution + lifecycle tracking applied to client-level analysis. 135 raw records &rarr; 117 unique people (18 cross-channel duplicates removed). 8 confirmed resolved. 109 evidence-backed unresolved clients in 3 tiers. Reconciliation with Catherine&rsquo;s ~70 estimate. Prior: v3.6 canon compliance, v3.5 Imagine confirmed, v3.4 classifier v5.1.</span>
+</div>
+
+<!-- Data Confidence Legend -->
+<h3>Data Confidence Legend</h3>
+<p>This brief distinguishes between numbers grounded in data and numbers that are estimates. Look for these markers:</p>
+
+<table>
+  <thead><tr><th>Marker</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tag tag-data">[DATA]</span></td><td>Directly from Front inbox classifier v5.1 output or verified source</td></tr>
+    <tr><td><span class="tag tag-est">[ESTIMATED]</span></td><td>Modeled, derived, or based on industry benchmarks &mdash; not validated against Nuovo&rsquo;s actual data</td></tr>
+    <tr><td><span class="tag tag-vendor">[VENDOR EST.]</span></td><td>Pricing from vendor research &mdash; subject to negotiation and actual quotes</td></tr>
+    <tr><td><span class="tag tag-derived">[DERIVED]</span></td><td>Calculated from other estimates &mdash; accuracy depends on input assumptions</td></tr>
+    <tr><td><span class="tag tag-entity">[ENTITY-RESOLVED]</span></td><td>Output of entity resolution and lifecycle state machine analysis &mdash; deduplicated to person level with evidence</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- What the Team Already Identified -->
+<h2>This Brief Formalizes What the Team Already Identified</h2>
+
+<p>During the February 25 After Service pt. 3 meeting, the operations team independently surfaced every core problem and most of the solutions contained in this brief. <strong>This is not a new proposal &mdash; it is a structured decision framework for actions the team is already requesting.</strong></p>
+
+<table>
+  <thead><tr><th>What the Team Said</th><th>What This Brief Does</th></tr></thead>
+  <tbody>
+    <tr><td>Anastasia requested 3-month data on unreceived stainless and album items, plus cost of shipping back-and-forth and cost of requiring signatures</td><td>Structures that request as <strong>Decision #1</strong> with a March 3 deadline and defines exactly what data to pull</td></tr>
+    <tr><td>Team discussed requiring signatures for stainless shipments</td><td>Recommends it as <strong>Tier 1</strong> with a mitigation plan for the depot-pickup problem it creates</td></tr>
+    <tr><td>Team identified need for tracking number via text/email to clients</td><td>Includes as <strong>Tier 1</strong> pre-delivery SMS notification</td></tr>
+    <tr><td>Team discussed shipping protection insurance as a necessity</td><td>Adds shipping insurance as a <strong>Tier 1</strong> item &mdash; either declared-value ($20-32/unit) or Route checkout protection ($0 to Nuovo; customer-paid)</td></tr>
+    <tr><td>Team identified need for UPS/FedEx API for automatic delivery notification</td><td>Builds this into <strong>Tier 2</strong> as multi-carrier API integration</td></tr>
+    <tr><td>Anastasia proposed a &ldquo;Domino&rsquo;s timeline&rdquo; visual for client order tracking</td><td>Incorporates as <strong>Tier 2</strong> Client Journey Tracker &mdash; a branded status page clients can check</td></tr>
+    <tr><td>Team discussed &ldquo;white glove service&rdquo; for high-value items</td><td>Develops this into <strong>Tier 3</strong> with per-city vendor evaluation</td></tr>
+    <tr><td>200+ items currently on hold across all cities</td><td>Confirms operational scale and urgency &mdash; this is not a theoretical problem</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Bottom line:</strong> The brief adds structure, financials, and a decision timeline. The instincts are the team&rsquo;s.</p>
+
+<hr>
+
+<!-- The Problem -->
+<h2>The Problem</h2>
+
+<p>Large-format aluminum (&ldquo;stainless&rdquo;) prints are experiencing non-delivery issues across all 8 studios. <strong>Front inbox analysis (Nov 2025&ndash;Feb 2026), classified by v5.1 zero-unclassified protocol, confirms:</strong> 578 confirmed delivery issue messages across 301 unique client conversations &mdash; out of 15,344 total conversations in the inbox (1.96% delivery complaint rate). An additional 30 messages (26 conversations) were initially flagged but classified as false positives (pre-production follow-ups, retouching requests, cancellations &mdash; not delivery failures). Top issue categories (multi-label &mdash; a single message may match multiple): Unclaimed/not picked up (314 matches), Redelivery requests (144), Non-receipt (107), Undeliverable (97), Wrong address (88), Return to sender (81), Sent back (66). December 2025 was the peak month at 40.8% of all flagged messages. 63% of delivery conversations contain a single message; the remaining 37% are multi-message threads (client reports, Nuovo responds, client follows up). Three root causes identified by the operations team:</p>
+
+<table>
+  <thead><tr><th>#</th><th>Root Cause</th><th>Impact</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><strong>Client not home + no reroute option</strong></td><td>Standard carriers attempt delivery, fail, and return-to-sender after 2-3 attempts. No SMS notification, no rerouting, no pickup alternative.</td></tr>
+    <tr><td>2</td><td><strong>Packaging damage exposing content</strong></td><td>These are semi-nude images of women. A damaged package in a lobby, on a porch, or in a shared mailroom is a brand-destroying event. The team&rsquo;s own client care protocol includes a &ldquo;CRITICAL INCIDENT (911)&rdquo; category for privacy breaches where clients receive someone else&rsquo;s images &mdash; the same exposure risk applies to damaged packaging in transit.</td></tr>
+    <tr><td>3</td><td><strong>Upstream errors compounding delivery issues</strong></td><td>A 4% selection/package mismatch rate (wrong items shipped) compounds downstream delivery failures. When the wrong product arrives, it triggers the same re-ship, CS escalation, and client frustration cycle as a non-delivery &mdash; but with the added cost of a reprint.</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Current state:</strong> Orders are sent to <strong>Imagine</strong> (formerly referenced as &ldquo;GTA Imaging&rdquo;) for printing and fulfillment. Imagine operates print locations in <strong>both the GTA (Greater Toronto Area) and the USA</strong>. Album orders are handled by <strong>Andy</strong>; stainless print orders are handled by <strong>Andrew</strong> &mdash; both at Imagine. Internally at Nuovo, <strong>Maryam and Maha</strong> coordinate fulfillment and delivery information. Nuovo has zero visibility after order submission. 200+ items are currently on hold across all cities &mdash; a backlog that remains unaddressed. Front inbox data shows the <code>hello@gtaimaging.com</code> recipient handle appears in 42.4% of confirmed delivery issue messages (245 of 578). <strong>Next Step:</strong> Confirm with Imagine which location (GTA vs. USA) handles which orders, and whether US orders ship domestically from the US location or cross-border from GTA.</p>
+
+<p><strong>Client-Level Analysis (v3.7 update):</strong> Message-level classification (608 messages, 578 confirmed) measures complaint volume. But the operational question &mdash; &ldquo;how many people are waiting for their prints?&rdquo; &mdash; requires person-level analysis. Entity resolution across all Front conversations found that the 135 raw delivery-issue records represent <strong>117 unique people</strong> <span class="tag tag-entity">[ENTITY-RESOLVED]</span> after removing 18 cross-channel duplicates (clients who appeared in both a direct Nuovo&harr;Client thread AND a separate Nuovo&harr;GTA coordination thread). Lifecycle state machine analysis then determined that <strong>8 of 117 have confirmed receipt</strong> &mdash; removing them from the active list leaves <strong>109 clients with evidence of unresolved delivery issues</strong> <span class="tag tag-entity">[ENTITY-RESOLVED]</span>.</p>
+
+<hr>
+
+<!-- Client-Level Evidence Analysis -->
+<h2>Client-Level Evidence Analysis <span class="tag tag-entity">[ENTITY-RESOLVED]</span></h2>
+
+<div class="callout-blue">
+  <strong>This section is new in v3.7.</strong> Previous versions counted messages (608) and conversations (301/327). This section counts <strong>people</strong> &mdash; the unit that matters for operational follow-up.
+</div>
+
+<h3>Methodology</h3>
+
+<p>Three analytical layers were applied sequentially to convert message-level data into a person-level action list:</p>
+
+<table>
+  <thead><tr><th>Layer</th><th>Input</th><th>Output</th><th>Method</th></tr></thead>
+  <tbody>
+    <tr><td>1. Classification (v5.1)</td><td>40,967 messages</td><td>578 confirmed delivery issues across 301 conversations</td><td>Regex pattern matching with false positive exclusion</td></tr>
+    <tr><td>2. Entity Resolution</td><td>135 raw delivery client records</td><td>117 unique people</td><td>Cross-channel name matching, email deduplication, fuzzy matching</td></tr>
+    <tr><td>3. Lifecycle State Machine</td><td>117 people &times; all messages</td><td>109 unresolved + 8 resolved</td><td>Chronological signal detection with reply-chain stripping</td></tr>
+  </tbody>
+</table>
+
+<h3>Entity Resolution: 135 &rarr; 117 Unique People</h3>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-number">135</div>
+    <div class="stat-label">Raw Records</div>
+  </div>
+  <div class="stat-card stat-red">
+    <div class="stat-number">&minus;18</div>
+    <div class="stat-label">Cross-Channel Duplicates</div>
+  </div>
+  <div class="stat-card stat-green">
+    <div class="stat-number">117</div>
+    <div class="stat-label">Unique People</div>
+  </div>
+  <div class="stat-card stat-blue">
+    <div class="stat-number">109</div>
+    <div class="stat-label">Unresolved</div>
+  </div>
+</div>
+
+<p>18 cross-channel duplicates were identified and merged &mdash; clients who appeared in both:</p>
+<ul>
+  <li><strong>Channel A:</strong> Direct Nuovo &harr; Client email thread (client&rsquo;s personal email in <code>recipient_handle</code>)</li>
+  <li><strong>Channel B:</strong> Nuovo &harr; GTA Imaging coordination thread (subject line contains client name, <code>recipient_handle = hello@gtaimaging.com</code>)</li>
+</ul>
+<p>Match confidence: 7 HIGH (exact name + contextual match), 11 MEDIUM (name match with supporting evidence). Zero false merges identified in spot-check validation.</p>
+
+<h3>Lifecycle State Machine: Current Status, Not Historical Mentions</h3>
+
+<p>For each of the 117 unique people, all messages were processed chronologically to determine CURRENT delivery status:</p>
+
+<table>
+  <thead><tr><th>Status</th><th>Count</th><th>%</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><strong>CONFIRMED_RECEIVED</strong></td><td>8</td><td>6.8%</td><td>Client explicitly confirmed receipt &mdash; RESOLVED, excluded from action list</td></tr>
+    <tr><td><strong>RESHIPPED_NO_CONFIRMATION</strong></td><td>85</td><td>72.6%</td><td>Item reshipped but no client confirmation of receipt</td></tr>
+    <tr><td><strong>UNRESOLVED_NOT_RECEIVED</strong></td><td>14</td><td>12.0%</td><td>Client explicitly says they have not received their order</td></tr>
+    <tr><td><strong>UNRESOLVED_RETURNED</strong></td><td>4</td><td>3.4%</td><td>Item confirmed returned to sender, no reshipping initiated</td></tr>
+    <tr><td><strong>STALE_UNKNOWN</strong></td><td>6</td><td>5.1%</td><td>No activity &gt;30 days, status unclear</td></tr>
+  </tbody>
+</table>
+
+<!-- Bar chart for lifecycle -->
+<div class="bar-chart">
+  <div class="bar-row">
+    <span class="bar-label">RESHIPPED_NO_CONF</span>
+    <div class="bar-track"><div class="bar-fill" style="width:72.6%;background:var(--yellow);">85</div></div>
+    <span class="bar-value">72.6%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">UNRESOLVED_NOT_RECV</span>
+    <div class="bar-track"><div class="bar-fill" style="width:12%;background:var(--red);">14</div></div>
+    <span class="bar-value">12.0%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">CONFIRMED_RECEIVED</span>
+    <div class="bar-track"><div class="bar-fill" style="width:6.8%;background:var(--green);">8</div></div>
+    <span class="bar-value">6.8%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">STALE_UNKNOWN</span>
+    <div class="bar-track"><div class="bar-fill" style="width:5.1%;background:var(--blue);">6</div></div>
+    <span class="bar-value">5.1%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">UNRESOLVED_RETURNED</span>
+    <div class="bar-track"><div class="bar-fill" style="width:3.4%;background:var(--red);">4</div></div>
+    <span class="bar-value">3.4%</span>
+  </div>
+</div>
+
+<h3>Three-Tier Evidence Model: 109 Unresolved Clients</h3>
+
+<p>The 109 unresolved clients are classified by evidence strength:</p>
+
+<table>
+  <thead><tr><th>Tier</th><th>Classification</th><th>Count</th><th>Evidence Standard</th><th>Operational Action</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tier-dot tier-1-dot"></span><strong>Tier 1</strong></td><td>CONFIRMED UNRESOLVED</td><td>34</td><td>Client explicitly states non-receipt, or item confirmed returned with no reshipping</td><td><strong>Immediate follow-up required</strong></td></tr>
+    <tr><td><span class="tier-dot tier-2-dot"></span><strong>Tier 2</strong></td><td>LIKELY UNRESOLVED</td><td>69</td><td>Item reshipped but no confirmation of receipt from client</td><td><strong>Monitor &mdash; proactive outreach recommended</strong></td></tr>
+    <tr><td><span class="tier-dot tier-3-dot"></span><strong>Tier 3</strong></td><td>NEEDS FOLLOW-UP</td><td>6</td><td>Stale thread (&gt;30 days no activity), status unclear</td><td><strong>Proactive outreach required</strong></td></tr>
+  </tbody>
+</table>
+
+<h3>Reconciliation with Catherine&rsquo;s ~70 Estimate</h3>
+
+<p>Catherine&rsquo;s operational estimate of ~70 unresolved clients aligns with this analysis:</p>
+
+<table>
+  <thead><tr><th>Component</th><th>Count</th><th>Explanation</th></tr></thead>
+  <tbody>
+    <tr><td>Tier 1: Confirmed Unresolved</td><td>34</td><td>These are definitively unresolved &mdash; Catherine would count all of these</td></tr>
+    <tr><td>Tier 2 subset: Likely still waiting</td><td>~30-40</td><td>Of the 69 reshipped-but-unconfirmed, Catherine likely knows from GTA/Imagine records which actually arrived</td></tr>
+    <tr><td><strong>Catherine&rsquo;s estimated total</strong></td><td><strong>~64-74</strong></td><td><strong>Aligns with her ~70 figure</strong></td></tr>
+    <tr><td>Tier 2 remainder</td><td>~29-39</td><td>These clients&rsquo; reshipped items likely DID arrive &mdash; they just never emailed confirmation</td></tr>
+    <tr><td>Tier 3: Needs follow-up</td><td>6</td><td>Stale cases Catherine may or may not be tracking</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>Key insight:</strong> The gap between our 109 and Catherine&rsquo;s ~70 is not an error &mdash; it&rsquo;s a <strong>data limitation</strong>. Front inbox data cannot tell us whether a reshipped item was successfully received if the client doesn&rsquo;t email back. Catherine has access to GTA Imaging&rsquo;s delivery confirmation records, which resolve the Tier 2 ambiguity. <strong>Pulling Imagine&rsquo;s actual delivery confirmation data remains the #1 action item</strong> and would definitively resolve all 69 Tier 2 cases.
+</div>
+
+<h3>Output Files <span class="tag tag-entity">[ENTITY-RESOLVED]</span></h3>
+
+<table>
+  <thead><tr><th>File</th><th>Description</th><th>Rows</th></tr></thead>
+  <tbody>
+    <tr><td><code>r4_FINAL_evidence_backed.csv</code></td><td><strong>Definitive client action list</strong> &mdash; 117 unique people with evidence quotes, lifecycle states, and 3-tier classification</td><td>117</td></tr>
+    <tr><td><code>r4_entity_resolved.csv</code></td><td>Entity resolution output &mdash; deduplication details and match evidence</td><td>117</td></tr>
+    <tr><td><code>r4_lifecycle_states.csv</code></td><td>Per-conversation lifecycle state machine output</td><td>135</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- Cost of Doing Nothing -->
+<h2>The Cost of Doing Nothing</h2>
+
+<div class="callout">
+  <strong>Important:</strong> The non-delivery rate was previously <strong>estimated at 8-12%</strong> based on industry benchmarks and internal signals (11% Toronto refund rate). <strong>Front inbox data now provides a harder number:</strong> 301 confirmed delivery-issue conversations out of 15,344 total conversations (1.96%) over 4 months (Nov 2025&ndash;Feb 2026). Against an estimated ~1,833 shipments in the same period, the <strong>observed complaint rate is ~16%</strong> (301 / 1,833). However, two important caveats: (1) The shipment estimate of 1,833 is derived, not verified &mdash; if actual shipments are higher, the rate is lower; (2) Not all non-deliveries result in a client message, so the true non-delivery rate may be higher than 16%. Conversely, some conversations may involve the same client opening multiple threads about one issue. <strong>Pulling Imagine&rsquo;s actual claim/return history remains the #1 action item</strong> &mdash; it will provide the definitive denominator (actual shipments) and numerator (actual returns/failures) to replace this estimate.
+  <br><br>
+  <strong>v3.7 update:</strong> Entity resolution and lifecycle analysis (see above) have refined this further: the 301 conversations represent <strong>117 unique people</strong>, of which <strong>109 have evidence of unresolved delivery issues</strong> <span class="tag tag-entity">[ENTITY-RESOLVED]</span>. This is the actionable client count for operational follow-up.
+</div>
+
+<h3>What We Know</h3>
+<ul>
+  <li><strong>Annual physical product shipments:</strong> ~5,500 <span class="tag tag-derived">[DERIVED]</span> (derived from 30K leads/mo &times; 30% show rate &times; 85% purchase rate &times; 53% physical product rate &mdash; none of these input rates are validated against actual order data)</li>
+  <li><strong>Average product value:</strong> ~$2,000-$2,500 <span class="tag tag-est">[ESTIMATED]</span> (based on average transaction size, not verified against actual product-level pricing)</li>
+</ul>
+
+<h3>Sensitivity Analysis &mdash; Annual Cost by Scenario <span class="tag tag-derived">[ALL VALUES DERIVED FROM ESTIMATES]</span></h3>
+
+<p>The cost of doing nothing depends on two variables: how often deliveries fail, and how much each failure costs. <strong>Both variables below are estimated &mdash; neither the non-delivery rate nor the cost-per-incident has been validated against actual Nuovo financial data.</strong> The incident counts assume ~5,500 annual shipments <span class="tag tag-derived">[DERIVED]</span>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>$378/incident <span class="tag tag-est">[ESTIMATED]</span><br>(Simple re-delivery)</th>
+      <th>$800/incident <span class="tag tag-est">[ESTIMATED]</span><br>(Weighted average)</th>
+      <th>$1,336/incident <span class="tag tag-est">[ESTIMATED]</span><br>(Damage + escalation)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>3% non-delivery</strong> (165 incidents)</td><td>$62,370</td><td>$132,000</td><td>$220,440</td></tr>
+    <tr><td><strong>5% non-delivery</strong> (276 incidents)</td><td>$104,328</td><td>$220,800</td><td>$368,736</td></tr>
+    <tr><td><strong>8% non-delivery</strong> (441 incidents)</td><td>$166,698</td><td><strong>$352,800</strong></td><td>$589,176</td></tr>
+    <tr><td><strong>12% non-delivery</strong> (661 incidents)</td><td>$249,858</td><td>$528,800</td><td>$883,096</td></tr>
+  </tbody>
+</table>
+
+<h3>Cost Per Incident &mdash; Decomposed <span class="tag tag-est">[ALL COMPONENTS ESTIMATED]</span></h3>
+
+<div class="callout-red">
+  <strong>None of these cost components have been validated against Nuovo&rsquo;s actual financial records.</strong> They are modeled estimates based on industry benchmarks and logical decomposition. To validate: pull actual re-ship costs from Imagine, actual CS time-per-case from Front, and actual refund/chargeback rates from the finance team.
+</div>
+
+<p><strong>Conservative ($378):</strong> Re-ship $45 + CS labor $70 + management $28 + probability-weighted refund risk $180 + chargeback risk $55. Applies when goods are undamaged, client is cooperative, resolved on first contact.</p>
+
+<p><strong>Realistic ($1,336):</strong> Expedited re-ship $75 + reprint (30% probability) $230 + extended CS labor $105 + escalation $56 + appeasement $120 + probability-weighted refund $625 + chargeback $125. Applies when goods are damaged, client is upset, multiple contacts required.</p>
+
+<p><strong>Central estimate ($800):</strong> Probability-weighted midpoint used for modeling.</p>
+
+<h3>Action Required Before Budget Decisions</h3>
+
+<div class="callout-green">
+  <strong>Pull Imagine&rsquo;s actual claim/return history.</strong> 30 minutes of work that calibrates the entire model. Front inbox analysis has partially validated the 8-12% range from the client-complaint side, but Imagine&rsquo;s fulfillment data will provide the definitive rate. Anastasia has already requested exactly this &mdash; it needs to happen by March 3. Contact Andy (albums) or Andrew (stainless) at Imagine; internally coordinate through Maryam / Maha.
+</div>
+
+<hr>
+
+<!-- Recommended Solution: 3-Tier Delivery Cascade -->
+<h2>Recommended Solution: 3-Tier Delivery Cascade</h2>
+
+<!-- TIER 1 -->
+<div class="tier-header tier-1">
+  <h3 style="color:var(--green);">TIER 1 &mdash; DEPLOY THIS WEEK</h3>
+  <p class="tier-cost"><strong>Cost:</strong> $800 setup + $430/month ($5,960 Year 1 platform cost) <span class="tag tag-vendor">[VENDOR EST.]</span><br>
+  <strong>Per-unit charges:</strong> Packaging upgrade ($2-8/unit <span class="tag tag-vendor">[VENDOR EST.]</span>) + shipping insurance. Insurance has two paths: declared-value through carrier ($20-32/unit <span class="tag tag-vendor">[VENDOR EST.]</span> for $2,000 products) or Route checkout protection ($0 to Nuovo &mdash; customer pays at checkout). <strong>If Route is adopted:</strong> $2-8/unit = $11,000-$44,000/year <span class="tag tag-derived">[DERIVED]</span>. <strong>If declared-value:</strong> $22-40/unit = $121,000-$220,000/year <span class="tag tag-derived">[DERIVED]</span>. Route is recommended &mdash; see Decision #7. <strong>Total Tier 1 range: $16,960-$49,960 Year 1 (Route) or $126,960-$225,960 (declared-value)</strong> <span class="tag tag-derived">[DERIVED]</span>.</p>
+</div>
+
+<table>
+  <thead><tr><th>Action</th><th>Reduction Contribution</th><th>Data Basis (Nuovo)</th><th>Impact</th></tr></thead>
+  <tbody>
+    <tr><td>Require signature on every shipment</td><td>12% <span class="tag tag-est">[ESTIMATED]</span></td><td>Unclaimed = 314 multi-label matches (54.3% of 578) <span class="tag tag-data">[DATA]</span>. Signature targets the &ldquo;not home / left at door&rdquo; subset.</td><td>Eliminates porch theft and misdelivery</td></tr>
+    <tr><td>Packaging spec to Imagine (see Appendix)</td><td>5% <span class="tag tag-est">[ESTIMATED]</span></td><td>Damaged = 3 matches (0.5% of 578) <span class="tag tag-data">[DATA]</span>. Damage is rare in complaints &mdash; packaging primarily mitigates brand/privacy risk, not complaint volume.</td><td>Eliminates content exposure and damage</td></tr>
+    <tr><td>Pre-delivery SMS to client</td><td>8% <span class="tag tag-est">[ESTIMATED]</span></td><td>Targets subset of Unclaimed (314) where client was unaware of delivery <span class="tag tag-data">[DATA]</span>. Exact addressable share unknown.</td><td>Client prepares to receive</td></tr>
+    <tr><td>Address gate in Monday.com</td><td>6% <span class="tag tag-est">[ESTIMATED]</span></td><td>Wrong Address = 88 multi-label matches (15.2% of 578) <span class="tag tag-data">[DATA]</span>. Data supports a higher ceiling than 6%.</td><td>Eliminates outdated address failures</td></tr>
+    <tr><td>Shipping insurance (Route: $0 to Nuovo; or declared-value: $20-32/unit <span class="tag tag-vendor">[VENDOR EST.]</span>)</td><td>&mdash;</td><td>&mdash;</td><td>Closes liability gap on $2,000+ products. Route recommended &mdash; customer pays at checkout, Nuovo cost = $0.</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Expected result:</strong> 31% reduction in non-delivery incidents <span class="tag tag-est">[ESTIMATED &mdash; sum of individual estimates, none validated]</span>.</p>
+
+<p><strong>Break-even:</strong> <span class="tag tag-derived">[ALL DERIVED FROM ESTIMATES]</span> Tier 1 platform cost ($5,960/yr) pays for itself at 0.3% non-delivery. With Route (packaging only, $11K-$44K/yr), break-even rises to <strong>0.9-2.5%</strong>. With declared-value insurance ($121K-$220K/yr), break-even rises to <strong>6.5-11.9%</strong> &mdash; dangerously close to the baseline, which is why Route is the recommended path.</p>
+
+<table>
+  <thead><tr><th>Non-Delivery Rate</th><th>Year 1 Net Benefit <span class="tag tag-derived">[DERIVED]</span></th></tr></thead>
+  <tbody>
+    <tr><td>3%</td><td>$34,840 - $62,156</td></tr>
+    <tr><td>8%</td><td>$45,826 - $177,072</td></tr>
+    <tr><td>12%</td><td>$71,530 - $267,820</td></tr>
+  </tbody>
+</table>
+
+<div class="callout-red">
+  <strong>Known risk &mdash; Signature creates a depot problem:</strong> Clients who aren&rsquo;t home may need to retrieve intimate prints from a carrier depot counter. <strong>Mitigation:</strong> At booking, notify clients that signature is required; include carrier hold-for-pickup instructions; add a preferred delivery window field at checkout. Tier 2&rsquo;s SMS rerouting resolves this permanently within 4-8 weeks.
+</div>
+
+<hr>
+
+<!-- TIER 2 -->
+<div class="tier-header tier-2">
+  <h3 style="color:var(--blue);">TIER 2 &mdash; BUILD IN 4-8 WEEKS</h3>
+  <p class="tier-cost"><strong>Cost:</strong> $6,600 setup + $805/month ($16,260 incremental Year 1) <span class="tag tag-vendor">[VENDOR EST.]</span><br>
+  <strong>Cumulative Year 1 cost with Tier 1:</strong> $22,220 <span class="tag tag-derived">[DERIVED]</span></p>
+</div>
+
+<p><strong>Gate:</strong> Do not approve until (1) Imagine data confirms non-delivery rate &ge; 3%, and (2) Imagine confirms tracking API capability.</p>
+
+<table>
+  <thead><tr><th>Action</th><th>Incremental Reduction</th><th>Data Basis (Nuovo)</th><th>Impact</th></tr></thead>
+  <tbody>
+    <tr><td>Multi-carrier API (EasyPost/ShipEngine)</td><td>5% <span class="tag tag-est">[ESTIMATED]</span></td><td>Still Waiting (26) + Tracking Issues (3) = 29 matches (5.0% of 578) <span class="tag tag-data">[DATA]</span>. Data aligns with estimate.</td><td>Real-time visibility, automated notifications</td></tr>
+    <tr><td>SMS rerouting: client replies &ldquo;REROUTE&rdquo;</td><td>18% <span class="tag tag-est">[ESTIMATED]</span></td><td>Redelivery = 144 multi-label (24.9%), 78 primary (13.5%) <span class="tag tag-data">[DATA]</span>. Addresses clients who missed first attempt. Estimate plausible if capturing part of Unclaimed overlap.</td><td>Catches failed first attempts before return-to-sender</td></tr>
+    <tr><td>UPS/FedEx Access Points as pickup fallback</td><td>10% <span class="tag tag-est">[ESTIMATED]</span></td><td>Return to Sender = 81 multi-label (14.0%), 66 primary (11.4%) <span class="tag tag-data">[DATA]</span>. Pickup fallback directly prevents RTS. Data supports this range.</td><td>Immediate fallback network (verify size limits for aluminum prints)</td></tr>
+    <tr><td>Branded Nuovo packaging ($4/unit <span class="tag tag-vendor">[VENDOR EST.]</span>)</td><td>2% <span class="tag tag-est">[ESTIMATED]</span></td><td>No direct data support &mdash; brand experience metric, not a complaint driver.</td><td>Delivery becomes brand moment</td></tr>
+    <tr><td>Automated failed-delivery workflow (4hr SLA)</td><td>3% <span class="tag tag-est">[ESTIMATED]</span></td><td>Undeliverable = 97 multi-label (16.8%), 27 primary (4.7%) <span class="tag tag-data">[DATA]</span>. Automated catch targets residual failures.</td><td>Monday.com webhook catches residual failures</td></tr>
+    <tr><td>Client Journey Tracker (&ldquo;Domino&rsquo;s Timeline&rdquo;)</td><td>&mdash;</td><td>&mdash;</td><td>Branded status page showing order progress from print to delivery. Inspired by Anastasia&rsquo;s proposal &mdash; clients see where their order is at every stage, reducing &ldquo;where&rsquo;s my order&rdquo; calls and building anticipation for the reveal</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Cumulative result:</strong> 69% reduction in non-delivery incidents <span class="tag tag-est">[ESTIMATED &mdash; sum of individual estimates, none validated]</span>.</p>
+
+<table>
+  <thead><tr><th>Non-Delivery Rate</th><th>Year 1 Net Benefit (cumulative with Tier 1) <span class="tag tag-derived">[DERIVED]</span></th></tr></thead>
+  <tbody>
+    <tr><td>3%</td><td>$20,872 - $130,084</td></tr>
+    <tr><td>8%</td><td>$92,692 - $383,924</td></tr>
+    <tr><td>12%</td><td>$150,148 - $587,196</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- TIER 3 -->
+<div class="tier-header tier-3">
+  <h3>TIER 3 &mdash; SCALE OVER 2-4 MONTHS</h3>
+  <p class="tier-cost"><strong>Cost:</strong> $17,000 setup + $2,780-$7,550/month <span class="tag tag-vendor">[VENDOR EST.]</span><br>
+  <strong>Cumulative Year 1 cost (25% adoption):</strong> $72,580 <span class="tag tag-derived">[DERIVED]</span><br>
+  <strong>Cumulative Year 1 cost (100% adoption):</strong> $129,820 <span class="tag tag-derived">[DERIVED]</span></p>
+</div>
+
+<p><strong>Gate:</strong> Do not approve until Tier 2 shows measurable improvement AND non-delivery rate confirmed &ge; 5%.</p>
+
+<table>
+  <thead><tr><th>Action</th><th>Incremental Reduction</th><th>Confidence</th><th>Data Basis (Nuovo)</th><th>Impact</th></tr></thead>
+  <tbody>
+    <tr><td>White-glove delivery partners per city</td><td>14% <span class="tag tag-est">[ESTIMATED]</span></td><td>LOW</td><td>Non-Receipt = 107 multi-label (18.5%), 122 primary (21.1%) <span class="tag tag-data">[DATA]</span>. White-glove addresses &ldquo;never arrived&rdquo; cases through scheduled delivery. Data supports ceiling above 14%.</td><td>Scheduled, pre-call, room-of-choice delivery &mdash; this is the &ldquo;white glove service&rdquo; the team discussed</td></tr>
+    <tr><td>Client delivery preference portal</td><td>6% <span class="tag tag-est">[ESTIMATED]</span></td><td>MEDIUM</td><td>Wrong Address (88) + subset of Unclaimed (314) <span class="tag tag-data">[DATA]</span>. Portal prevents address errors and sets delivery preferences proactively.</td><td>Client confirms address, sets privacy flag, chooses backup</td></tr>
+    <tr><td>Branded pickup partners (galleries, framers)</td><td>4% <span class="tag tag-est">[ESTIMATED]</span></td><td>LOW</td><td>Remaining Return to Sender (81) + Unclaimed (314) residual <span class="tag tag-data">[DATA]</span>. Alternative pickup prevents final-stage failures.</td><td>On-brand fallback vs. UPS Store counter</td></tr>
+    <tr><td>Post-delivery concierge call (24hr)</td><td>1% <span class="tag tag-est">[ESTIMATED]</span></td><td>HIGH</td><td>No direct complaint data &mdash; retention/referral metric.</td><td>Seeds referral</td></tr>
+    <tr><td>Nuovo Unboxing Kit</td><td>1% <span class="tag tag-est">[ESTIMATED]</span></td><td>LOW</td><td>No direct complaint data &mdash; brand experience metric.</td><td>Delivery IS the brand&rsquo;s final chapter</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Expected result:</strong> 95% cumulative reduction. Non-delivery drops to 0.4% <span class="tag tag-est">[ESTIMATED &mdash; sum of individual estimates across all 3 tiers, none validated]</span>.</p>
+
+<table>
+  <thead><tr><th>Non-Delivery Rate</th><th>Year 1 Net Benefit (25% adoption)</th></tr></thead>
+  <tbody>
+    <tr><td>3%</td><td>-$13,234 to $137,172 (caution: may be net negative at conservative cost)</td></tr>
+    <tr><td>8%</td><td>$85,802 - $487,204</td></tr>
+    <tr><td>12%</td><td>$164,864 - $766,028</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Referral pipeline (shown separately &mdash; not included in tier benefits):</strong> At 8% non-delivery, Tier 3 could recover an estimated $737K in referral value &mdash; but this is LOW confidence and requires 6+ months of tracking to validate. Do not use this number to justify budget.</p>
+
+<hr>
+
+<!-- Data-Grounded Impact Analysis -->
+<h2>Data-Grounded Impact Analysis &mdash; What the Nuovo Data Actually Shows <span class="tag tag-data">[DATA]</span></h2>
+
+<p>The tier tables above use estimated reduction percentages. This section grounds those estimates in the <strong>actual category counts from 578 confirmed delivery issue messages</strong> classified by the v5.1 protocol.</p>
+
+<h3>Category-to-Intervention Mapping</h3>
+
+<table>
+  <thead><tr><th>Category</th><th>Count (Primary)</th><th>% of 578</th><th>Tier 1 Interventions</th><th>Tier 2 Interventions</th><th>Tier 3 Interventions</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Unclaimed / Not Picked Up</strong></td><td>206</td><td>35.6%</td><td>Signature requirement, Pre-delivery SMS</td><td>SMS rerouting, Access Points</td><td>White-glove, Delivery preference portal</td></tr>
+    <tr><td><strong>Non-Receipt</strong></td><td>122</td><td>21.1%</td><td>Pre-delivery SMS (awareness)</td><td>Multi-carrier API (tracking)</td><td>White-glove delivery</td></tr>
+    <tr><td><strong>Redelivery Requests</strong></td><td>78</td><td>13.5%</td><td>&mdash;</td><td>SMS rerouting (primary target)</td><td>Delivery preference portal</td></tr>
+    <tr><td><strong>Return to Sender</strong></td><td>66</td><td>11.4%</td><td>Signature (prevents abandonment)</td><td>Access Points (pickup fallback)</td><td>Branded pickup partners</td></tr>
+    <tr><td><strong>Wrong Address</strong></td><td>62</td><td>10.7%</td><td>Address gate in Monday.com (primary target)</td><td>&mdash;</td><td>Delivery preference portal</td></tr>
+    <tr><td><strong>Lost / Missing</strong></td><td>39</td><td>6.7%</td><td>&mdash;</td><td>Multi-carrier API (tracking)</td><td>White-glove</td></tr>
+    <tr><td><strong>Sent Back</strong></td><td>32</td><td>5.5%</td><td>Signature</td><td>Access Points</td><td>&mdash;</td></tr>
+    <tr><td><strong>Still Waiting</strong></td><td>28</td><td>4.8%</td><td>Pre-delivery SMS</td><td>Multi-carrier API</td><td>&mdash;</td></tr>
+    <tr><td><strong>Undeliverable</strong></td><td>27</td><td>4.7%</td><td>Address gate</td><td>Automated workflow (4hr SLA)</td><td>White-glove</td></tr>
+    <tr><td><strong>Stolen</strong></td><td>6</td><td>1.0%</td><td>Signature (primary prevention)</td><td>&mdash;</td><td>White-glove</td></tr>
+    <tr><td><strong>Tracking Issues</strong></td><td>5</td><td>0.9%</td><td>&mdash;</td><td>Multi-carrier API (primary target)</td><td>&mdash;</td></tr>
+    <tr><td><strong>Damaged</strong></td><td>4</td><td>0.7%</td><td>Packaging spec (primary target)</td><td>Branded packaging</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>Note:</strong> Primary counts assign each message to one dominant category. Multi-label counts are higher because a single message can match multiple categories (e.g., &ldquo;unclaimed and sent back&rdquo; counts in both). Primary counts sum to more than 578 due to rounding in the classifier; totals should be read as approximate.
+</div>
+
+<!-- Category bar chart -->
+<h3>Category Breakdown &mdash; Primary Counts</h3>
+<div class="bar-chart">
+  <div class="bar-row">
+    <span class="bar-label">Unclaimed</span>
+    <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--gold);">206</div></div>
+    <span class="bar-value">35.6%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Non-Receipt</span>
+    <div class="bar-track"><div class="bar-fill" style="width:59.2%;background:var(--red);">122</div></div>
+    <span class="bar-value">21.1%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Redelivery</span>
+    <div class="bar-track"><div class="bar-fill" style="width:37.9%;background:var(--blue);">78</div></div>
+    <span class="bar-value">13.5%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Return to Sender</span>
+    <div class="bar-track"><div class="bar-fill" style="width:32%;background:var(--yellow);">66</div></div>
+    <span class="bar-value">11.4%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Wrong Address</span>
+    <div class="bar-track"><div class="bar-fill" style="width:30.1%;background:var(--green);">62</div></div>
+    <span class="bar-value">10.7%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Lost / Missing</span>
+    <div class="bar-track"><div class="bar-fill" style="width:18.9%;background:var(--purple);">39</div></div>
+    <span class="bar-value">6.7%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Sent Back</span>
+    <div class="bar-track"><div class="bar-fill" style="width:15.5%;background:var(--gold);">32</div></div>
+    <span class="bar-value">5.5%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Still Waiting</span>
+    <div class="bar-track"><div class="bar-fill" style="width:13.6%;background:var(--blue);">28</div></div>
+    <span class="bar-value">4.8%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Undeliverable</span>
+    <div class="bar-track"><div class="bar-fill" style="width:13.1%;background:var(--red);">27</div></div>
+    <span class="bar-value">4.7%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Stolen</span>
+    <div class="bar-track"><div class="bar-fill" style="width:2.9%;background:var(--yellow);">6</div></div>
+    <span class="bar-value">1.0%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Tracking Issues</span>
+    <div class="bar-track"><div class="bar-fill" style="width:2.4%;background:var(--green);">5</div></div>
+    <span class="bar-value">0.9%</span>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Damaged</span>
+    <div class="bar-track"><div class="bar-fill" style="width:1.9%;background:var(--purple);">4</div></div>
+    <span class="bar-value">0.7%</span>
+  </div>
+</div>
+
+<h3>What This Means for Nuovo &mdash; Real Impact Estimates</h3>
+
+<p>Using the 301 confirmed delivery-issue conversations (the unit that matters &mdash; one conversation = one client problem):</p>
+
+<h4>Tier 1 &mdash; Addressable by data:</h4>
+<ul>
+  <li><strong>Signature requirement</strong> targets Unclaimed (206 primary cases = 35.6% of issues). However, not all unclaimed cases are &ldquo;left at door&rdquo; &mdash; some are depot holds or failed attempts where signature wouldn&rsquo;t help. <strong>Conservative data-grounded estimate: 15-25% reduction</strong> (vs. 12% in brief). The 12% estimate may actually be conservative.</li>
+  <li><strong>Address gate</strong> targets Wrong Address (62 primary cases = 10.7%). An address verification step at booking would catch most of these. <strong>Data-grounded estimate: 8-10% reduction</strong> (vs. 6% in brief). The 6% estimate appears conservative.</li>
+  <li><strong>Pre-delivery SMS</strong> targets a subset of Unclaimed + Still Waiting (206 + 28 = 234 cases). Awareness alone won&rsquo;t prevent all failures, but it can reduce &ldquo;wasn&rsquo;t expecting it&rdquo; non-deliveries. <strong>Data-grounded estimate: 5-10% reduction</strong> (vs. 8% in brief). Estimate is plausible.</li>
+  <li><strong>Packaging spec</strong> targets Damaged (4 primary cases = 0.7%). As a complaint driver, damage is minimal. <strong>Data-grounded estimate: &lt;1% complaint reduction</strong> (vs. 5% in brief). The 5% is overstated as a complaint reducer &mdash; but packaging is primarily a <strong>brand/privacy risk mitigation</strong>, not a complaint volume play.</li>
+</ul>
+
+<p><strong>Tier 1 data-grounded total: 28-45% of the 578 delivery issues are directly addressable</strong> &mdash; the brief&rsquo;s 31% estimate falls within this range and is reasonable.</p>
+
+<h4>Tier 2 &mdash; Addressable by data:</h4>
+<ul>
+  <li><strong>SMS rerouting</strong> targets Redelivery (78 primary) + Unclaimed residual. <strong>Data-grounded: 10-15%</strong> (vs. 18% in brief). The 18% may be optimistic unless it captures significant Unclaimed overlap.</li>
+  <li><strong>Access Points</strong> target Return to Sender (66 primary) + Sent Back (32). <strong>Data-grounded: 8-12%</strong> (vs. 10% in brief). Estimate is reasonable.</li>
+  <li><strong>Multi-carrier API</strong> targets Still Waiting (28) + Tracking Issues (5) + Lost/Missing (39). <strong>Data-grounded: 5-8%</strong> (vs. 5% in brief). Conservative.</li>
+  <li><strong>Automated workflow</strong> targets Undeliverable (27 primary). <strong>Data-grounded: 3-5%</strong> (vs. 3% in brief). Reasonable.</li>
+</ul>
+
+<p><strong>Tier 2 data-grounded incremental total: 26-40%</strong> &mdash; the brief&rsquo;s 38% is at the high end but within range.</p>
+
+<h3>What the Data Says the Brief Got Right vs. Wrong</h3>
+
+<table>
+  <thead><tr><th>Brief Claim</th><th>Data Support</th><th>Verdict</th></tr></thead>
+  <tbody>
+    <tr><td>Signature = 12% reduction</td><td>Unclaimed is 35.6% of issues; signature addresses a subset</td><td><strong style="color:var(--green);">Conservative</strong> &mdash; data supports higher</td></tr>
+    <tr><td>Packaging = 5% reduction</td><td>Damaged is only 0.7% of complaints</td><td><strong style="color:var(--red);">Overstated as complaint reducer</strong> &mdash; valid as privacy/brand risk play</td></tr>
+    <tr><td>Address gate = 6%</td><td>Wrong Address is 10.7%</td><td><strong style="color:var(--green);">Conservative</strong> &mdash; data supports higher</td></tr>
+    <tr><td>SMS rerouting = 18%</td><td>Redelivery is 13.5% (primary)</td><td><strong style="color:var(--yellow);">Possibly optimistic</strong> &mdash; needs Unclaimed overlap to hit 18%</td></tr>
+    <tr><td>Access Points = 10%</td><td>Return to Sender is 11.4%</td><td><strong style="color:var(--green);">Aligned</strong></td></tr>
+    <tr><td>Tier 1 total = 31%</td><td>Data-grounded range: 28-45%</td><td><strong style="color:var(--green);">Reasonable</strong></td></tr>
+    <tr><td>Tier 2 cumulative = 69%</td><td>Data-grounded range: 54-85%</td><td><strong style="color:var(--yellow);">Within range, but wide</strong></td></tr>
+  </tbody>
+</table>
+
+<h3>Applying to Nuovo&rsquo;s Actual Case Volume</h3>
+
+<p>Based on 301 delivery-issue conversations over 4 months (Nov 2025&ndash;Feb 2026), annualized to ~903 delivery-issue conversations per year <span class="tag tag-derived">[DERIVED &mdash; assumes rate is constant across all months, which December peak data suggests it is not]</span>:</p>
+
+<table>
+  <thead><tr><th>Scenario</th><th>Conversations Prevented (Year 1)</th><th>CS Hours Saved (est. 30 min/case) <span class="tag tag-est">[ESTIMATED]</span></th></tr></thead>
+  <tbody>
+    <tr><td><strong>Tier 1 at 31%</strong> <span class="tag tag-est">[ESTIMATED]</span></td><td>~280</td><td>~140 hours</td></tr>
+    <tr><td><strong>Tier 1 at data-grounded 28-45%</strong></td><td>~253-406</td><td>~126-203 hours</td></tr>
+    <tr><td><strong>Through Tier 2 at 69%</strong> <span class="tag tag-est">[ESTIMATED]</span></td><td>~623</td><td>~311 hours</td></tr>
+    <tr><td><strong>Through Tier 2 at data-grounded 54-85%</strong></td><td>~488-767</td><td>~244-384 hours</td></tr>
+  </tbody>
+</table>
+
+<div class="callout-green">
+  <strong>Key takeaway:</strong> The brief&rsquo;s reduction estimates are broadly supported by the data, but several individual action items are misaligned. Signature and address gate are <strong>underestimated</strong>, packaging impact is <strong>overstated</strong> as a complaint reducer, and SMS rerouting is at the <strong>optimistic end</strong>. The aggregate Tier 1 estimate of 31% is reasonable. <strong>All financial projections remain unvalidated until Imagine provides actual shipment counts and re-ship costs.</strong>
+</div>
+
+<hr>
+
+<!-- Investment Summary -->
+<h2>Investment Summary <span class="tag tag-derived">[ALL VALUES DERIVED FROM VENDOR ESTIMATES + MODELED ASSUMPTIONS]</span></h2>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Setup <span class="tag tag-vendor">[VENDOR EST.]</span></th>
+      <th>Monthly <span class="tag tag-vendor">[VENDOR EST.]</span></th>
+      <th>Year 1 Platform <span class="tag tag-derived">[DERIVED]</span></th>
+      <th>Per-Unit Charges <span class="tag tag-derived">[DERIVED]</span></th>
+      <th>Year 1 Total <span class="tag tag-derived">[DERIVED]</span></th>
+      <th>Year 1 Net Benefit (at 8%, central) <span class="tag tag-derived">[DERIVED]</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Tier 1</strong></td><td>$800</td><td>$430</td><td>$5,960</td><td>$11,000-$44,000</td><td><strong>$16,960-$49,960</strong></td><td><strong>$59,640-$92,640</strong></td></tr>
+    <tr><td><strong>Through Tier 2</strong></td><td>$7,400</td><td>$1,235</td><td>$22,220</td><td>$11,000-$44,000</td><td><strong>$33,220-$66,220</strong></td><td><strong>$176,180-$209,180</strong></td></tr>
+    <tr><td><strong>Through Tier 3 (25%)</strong></td><td>$24,400</td><td>$4,015</td><td>$72,580</td><td>$11,000-$44,000</td><td><strong>$83,580-$116,580</strong></td><td><strong>$218,620-$251,620</strong></td></tr>
+    <tr><td><strong>Through Tier 3 (100%)</strong></td><td>$24,400</td><td>$8,785</td><td>$129,820</td><td>$11,000-$44,000</td><td><strong>$140,820-$173,820</strong></td><td><strong>$161,380-$194,380</strong></td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>Reading this table:</strong> Each row is cumulative. Per-unit charges assume <strong>Route model</strong> (customer-paid insurance at checkout = $0 to Nuovo), so per-unit charges = packaging only ($2-8/unit &times; ~5,500 shipments). If declared-value insurance is used instead ($20-32/unit), add $110,000-$176,000 to per-unit charges &mdash; see Decision #7 for the insurance path choice. Net Benefit = annual cost savings (at 8% non-delivery, $800/incident) minus Year 1 Total. All tiers are strongly net positive under the Route model.
+</div>
+
+<h3>Break-Even: At What Rate Does Each Tier Fail? <span class="tag tag-derived">[ALL VALUES DERIVED FROM ESTIMATES]</span></h3>
+
+<table>
+  <thead><tr><th>Tier</th><th>Minimum Non-Delivery Rate to Break Even (conservative cost)</th></tr></thead>
+  <tbody>
+    <tr><td>Tier 1 (platform only)</td><td><strong>0.3%</strong> &mdash; platform cost alone</td></tr>
+    <tr><td>Tier 1 + Route packaging</td><td><strong>0.9-2.5%</strong> &mdash; packaging only, Route handles insurance</td></tr>
+    <tr><td>Tier 1 + declared-value insurance</td><td><strong>6.5-11.9%</strong> &mdash; NOT recommended; too close to baseline</td></tr>
+    <tr><td>Through Tier 2</td><td><strong>1.1%</strong> &mdash; safe bet</td></tr>
+    <tr><td>Through Tier 3 (25%)</td><td><strong>3.5%</strong> &mdash; requires Imagine data validation</td></tr>
+    <tr><td>Through Tier 3 (100%)</td><td><strong>6.0%</strong> &mdash; requires strong evidence</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>Note:</strong> These break-even points depend on both the estimated cost-per-incident ($378-$1,336 <span class="tag tag-est">[ESTIMATED]</span>) and estimated annual shipments (~5,500 <span class="tag tag-derived">[DERIVED]</span>). If actual shipments are lower, break-even points rise. If actual cost-per-incident is higher, they fall. Neither has been validated.
+</div>
+
+<hr>
+
+<!-- Risks & Mitigations -->
+<h2>Risks &amp; Mitigations</h2>
+
+<table>
+  <thead><tr><th>#</th><th>Risk</th><th>L</th><th>I</th><th>Mitigation</th><th>Owner</th></tr></thead>
+  <tbody>
+    <tr><td>R-01</td><td>Imagine refuses packaging spec</td><td><span class="li-medium">M</span></td><td><span class="li-high">H</span></td><td>Formal written spec with 30-day compliance window. Qualify backup printer (Bay Photo) as leverage. Contact Andy (albums) / Andrew (stainless).</td><td>Operations</td></tr>
+    <tr><td>R-02</td><td>Signature-required causes depot pickups</td><td><span class="li-high">H</span></td><td><span class="li-high">H</span></td><td>Notify clients at booking; carrier hold-for-pickup instructions; delivery window preference field. Tier 2 SMS rerouting resolves permanently.</td><td>Client Experience</td></tr>
+    <tr><td>R-03</td><td>GoBolt pricing higher than assumed</td><td><span class="li-high">H</span></td><td><span class="li-medium">M</span></td><td>Obtain 3 competitive quotes before Tier 2 commitment. Issue formal RFQ.</td><td>Operations</td></tr>
+    <tr><td>R-04</td><td>Cross-border customs exposure (HTS code)</td><td><span class="li-medium">M</span></td><td><span class="li-high">H</span></td><td>Engage customs broker BEFORE Tier 2. Confirm USMCA eligibility.</td><td>Finance</td></tr>
+    <tr><td>R-05</td><td>Client opts out of signature requirement</td><td><span class="li-medium">M</span></td><td><span class="li-medium">M</span></td><td>Signed privacy waiver + liability acknowledgment. Legal review required.</td><td>Client Experience</td></tr>
+    <tr><td>R-06</td><td>Imagine has no tracking API (Tier 2 blocker)</td><td><span class="li-medium">M</span></td><td><span class="li-high">H</span></td><td><strong>Hard gate.</strong> Validate before Tier 2 budget approval. If no API within 60 days, initiate printer migration. Contact Andy / Andrew at Imagine.</td><td>Technology</td></tr>
+    <tr><td>R-07</td><td>Insurance gap on $2,000+ intimate products</td><td><span class="li-high">H</span></td><td><span class="li-high">H</span></td><td>Two paths: Route checkout protection ($0 to Nuovo, customer-paid) or declared-value insurance ($20-32/unit for $2K products). Route recommended. Decision #7.</td><td>Operations</td></tr>
+    <tr><td>R-08</td><td>Actual non-delivery rate lower than modeled</td><td><span class="li-medium">M</span></td><td><span class="li-medium">M</span></td><td>Sensitivity analysis gates all decisions. Tier 3 not justified below 3.5%.</td><td>Finance</td></tr>
+    <tr><td>R-09</td><td>4% selection/package mismatch compounds delivery failures</td><td><span class="li-medium">M</span></td><td><span class="li-medium">M</span></td><td>Separate quality track required &mdash; mismatch errors generate re-ships regardless of delivery success. Flag to Imagine (Andy / Andrew) as concurrent initiative.</td><td>Operations / QA</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- Vendor Evaluation -->
+<h2>Vendor Evaluation</h2>
+
+<p>No single vendor covers all 8 cities at both Tier 2 and Tier 3. A hybrid model is required.</p>
+
+<table>
+  <thead><tr><th>Criterion</th><th>GoBolt</th><th>UPS/FedEx Premium</th><th>Art-Specific Shippers</th></tr></thead>
+  <tbody>
+    <tr><td>8-city coverage</td><td>~6 of 8 (Ottawa/Montreal TBD)</td><td>All 8</td><td>Per-city only</td></tr>
+    <tr><td>API integration</td><td>Modern REST API</td><td>Mature, widely integrated</td><td>Manual/phone-based</td></tr>
+    <tr><td>Oversized (40&Prime;&times;60&Prime;)</td><td>Built for oversized</td><td>Premium surcharges</td><td>Core competency</td></tr>
+    <tr><td>White-glove option</td><td>Partial</td><td>No</td><td>Yes &mdash; standard</td></tr>
+    <tr><td>Price tier</td><td>Medium</td><td>Medium-High</td><td>High</td></tr>
+    <tr><td>Setup time</td><td>4-8 weeks</td><td>2-4 weeks</td><td>2-4 weeks per city</td></tr>
+  </tbody>
+</table>
+
+<p><strong>GoBolt volume concern:</strong> GoBolt typically requires 3,000 orders/month minimum. Nuovo ships ~458/month (~5,500/year). GoBolt may not accept Nuovo as a client at current volume, or may charge premium rates for low-volume/high-value accounts. Confirm viability before relying on GoBolt for Tier 2/3.</p>
+
+<p><strong>Recommendation:</strong> Lead with UPS/FedEx premium services for Tier 2 (guaranteed coverage in all 8 cities, no volume minimums). Evaluate GoBolt in parallel for potential Tier 3 white-glove in cities where they operate. Per-city art shippers for Tier 3 white-glove where GoBolt is unavailable or uneconomical. No commitment until RFQ pricing and actual non-delivery data are in hand.</p>
+
+<hr>
+
+<!-- Decisions Required -->
+<h2>Decisions Required</h2>
+
+<table>
+  <thead><tr><th>#</th><th>Decision</th><th>Owner</th><th>Deadline</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="section-badge">1</span></td>
+      <td>Pull Imagine claim/return history (actual non-delivery rate) &mdash; Anastasia has already requested this data. <strong>Partial progress:</strong> Front inbox analysis confirms 301 delivery-issue conversations out of 15,344 total (1.96% complaint rate). Against estimated shipments, complaint rate is ~16% &mdash; but this depends on the shipment estimate being accurate. Imagine&rsquo;s data provides the real denominator (actual shipments sent) to replace the estimate. Contact: Andy (albums), Andrew (stainless). Internal: Maryam / Maha.</td>
+      <td>Jesse / Miriam</td>
+      <td>March 3</td>
+    </tr>
+    <tr>
+      <td><span class="section-badge">2</span></td>
+      <td>Approve Tier 1 packaging spec to send to Imagine (Andrew for stainless, Andy for albums)</td>
+      <td>Jesse</td>
+      <td>March 3</td>
+    </tr>
+    <tr>
+      <td><span class="section-badge">3</span></td>
+      <td>Confirm Imagine has tracking API capability (Tier 2 hard gate) &mdash; contact Andy / Andrew</td>
+      <td>Jesse / Lucas (IT)</td>
+      <td>March 7</td>
+    </tr>
+    <tr>
+      <td><span class="section-badge">4</span></td>
+      <td>Budget approval for Tier 2 ($6,600 + $805/month) &mdash; conditional on Decision #1 result</td>
+      <td>Jesse / Saby</td>
+      <td>March 7</td>
+    </tr>
+    <tr>
+      <td><span class="section-badge">5</span></td>
+      <td>Select pilot cities for Tier 3 white-glove (recommend: Toronto + Miami)</td>
+      <td>Jesse / Catherine</td>
+      <td>March 14</td>
+    </tr>
+    <tr>
+      <td><span class="section-badge">6</span></td>
+      <td>Engage customs broker for HTS code ruling ($500-$1,500)</td>
+      <td>Saby</td>
+      <td>March 3</td>
+    </tr>
+    <tr>
+      <td><span class="section-badge">7</span></td>
+      <td>Add shipping insurance to all GTA shipments (Tier 1, immediate) &mdash; note: actual cost is $20-$32/unit for $2,000 products, not $3-$8 as initially estimated. Consider Route (customer-paid at checkout) as a zero-cost alternative.</td>
+      <td>Jesse / Miriam</td>
+      <td>March 3</td>
+    </tr>
+    <tr>
+      <td><span class="section-badge">8</span></td>
+      <td><strong>Confirm printer routing by location:</strong> Imagine (the print/fulfillment partner) has facilities in both the GTA and the USA. <strong>Key question:</strong> Do US orders print and ship from the US facility (domestic), or do all orders ship cross-border from the GTA location? This determines whether 55% of shipments require customs clearance and changes the entire cross-border cost model. Contact: Andy (albums) or Andrew (stainless) at Imagine. Internal: Maryam / Maha.</td>
+      <td>Jesse / Catherine</td>
+      <td>March 3</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- One Thing to Do Today -->
+<h2>One Thing to Do Today</h2>
+
+<div class="callout-green" style="border-left-width:5px; padding:1.2rem 1.5rem;">
+  <strong style="font-size:1.05rem;">Send the packaging spec below to Imagine</strong> (contact: Andrew for stainless, Andy for albums). The per-unit material cost may increase by $2-8, but the alternative is continuing to ship $2,000 intimate photographs in packaging that can split open in a shared mailroom.
+</div>
+
+<hr>
+
+<!-- APPENDIX A -->
+<h2>APPENDIX A: Packaging Spec for Imagine &mdash; Stainless Prints</h2>
+
+<p><em>Effective immediately for all Nuovo Artistic Studios orders</em></p>
+
+<table>
+  <thead><tr><th>Requirement</th><th>Specification</th><th>Reason</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Outer wrap</strong></td><td>Opaque black poly shrink wrap &mdash; no clear wrap, no windows</td><td>Content must not be visible if box is damaged</td></tr>
+    <tr><td><strong>Outer box</strong></td><td>Double-wall corrugated (min 275 lb burst strength)</td><td>Stainless prints are rigid aluminum &mdash; single-wall cracks on impact</td></tr>
+    <tr><td><strong>Corner protection</strong></td><td>Foam corner protectors on all 4 corners</td><td>Prevents dent/bend damage during transit</td></tr>
+    <tr><td><strong>Inner padding</strong></td><td>Closed-cell foam sheets on both faces (min 1/4&Prime; thick)</td><td>Prevents surface scratching against box walls</td></tr>
+    <tr><td><strong>Seal</strong></td><td>Tamper-evident security tape on all seams</td><td>Client must see if package was opened in transit</td></tr>
+    <tr><td><strong>Label</strong></td><td>Generic return address (no &ldquo;Nuovo&rdquo; branding on shipping label)</td><td>Privacy &mdash; neighbors/doormen should not identify contents</td></tr>
+    <tr><td><strong>Signature</strong></td><td>Require signature on every delivery (no safe-drop, no leave-at-door)</td><td>Eliminates porch theft and misdelivery</td></tr>
+    <tr><td><strong>Fragile marking</strong></td><td>&ldquo;FRAGILE &mdash; DO NOT BEND &mdash; THIS SIDE UP&rdquo; on all 4 sides</td><td>Standard carrier handling protocol</td></tr>
+    <tr><td><strong>Insurance</strong></td><td>Shipping insurance on every shipment &mdash; Route checkout protection (recommended, $0 to Nuovo) or declared-value ($20-32/unit for $2K products)</td><td>Closes liability gap on $2,000+ products</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Contact (Albums):</strong> Andy at Imagine (GTA print location)<br>
+<strong>Contact (Stainless):</strong> Andrew at Imagine (GTA print location)<br>
+<strong>Internal Contacts:</strong> Maryam and Maha (Nuovo &mdash; handle fulfillment/delivery coordination)<br>
+<strong>Timeline:</strong> <em>To be completed by Jesse before sending &mdash; effective date for new packaging standard</em></p>
+
+<div class="callout">
+  <strong>Note to Jesse:</strong> The timeline field must be filled before this spec is sent to Imagine. The spec is ready to send the same day this is added &mdash; no other edits needed.
+</div>
+
+<hr>
+
+<!-- APPENDIX B -->
+<h2>APPENDIX B: Operational Context from Team Meeting (Feb 25, 2026)</h2>
+
+<p>This appendix documents the operational data points raised by the team during the After Service pt. 3 meeting that informed this brief:</p>
+
+<table>
+  <thead><tr><th>Data Point</th><th>Source</th><th>Implication</th></tr></thead>
+  <tbody>
+    <tr><td>200+ items currently on hold across all cities</td><td>Operations team</td><td>The delivery backlog is real and growing &mdash; not a theoretical risk</td></tr>
+    <tr><td>4% selection/package mismatch error rate</td><td>QA data</td><td>Wrong items shipped compound delivery failures with added reprint costs</td></tr>
+    <tr><td>&ldquo;CRITICAL INCIDENT (911)&rdquo; protocol for privacy breaches</td><td>Client care decision tree (&ldquo;With The Flow&rdquo; doc, 45+ scenarios)</td><td>The team already treats content exposure as a critical incident &mdash; this brief&rsquo;s packaging spec prevents it in transit</td></tr>
+    <tr><td>Photographers have 1 week to follow up before commission is invalidated</td><td>Payment/hold policy</td><td>Delivery delays affect photographer compensation and create internal friction</td></tr>
+    <tr><td>Team independently discussed signature requirements, tracking notifications, shipping insurance, and white glove service</td><td>After Service pt. 3 meeting notes</td><td>Every Tier 1-3 concept originated from or was validated by the operations team</td></tr>
+    <tr><td>578 confirmed delivery issue messages across 301 conversations + 30 false positives (26 conversations) excluded by v5.1 classifier (Nov 2025&ndash;Feb 2026)</td><td>Front inbox analysis (41,418 messages, 15,344 conversations classified)</td><td>1.96% of all conversations involve a delivery complaint &mdash; systemic, not anecdotal. 63% of flagged conversations contain a single message; 37% are multi-message threads.</td></tr>
+    <tr><td>Unclaimed/not-picked-up is the dominant pattern (314 multi-label matches across 578 delivery messages)</td><td>Front inbox analysis &mdash; v5.1 classifier</td><td>Directly supports Tier 1 signature requirement as highest-impact intervention. Next: Redelivery requests (144), Non-receipt (107), Undeliverable (97), Wrong address (88).</td></tr>
+    <tr><td>Imagine recipient handle (<code>hello@gtaimaging.com</code>) appears in 42.4% of confirmed delivery issue messages (245 of 578)</td><td>Front inbox analysis &mdash; v5.1 classifier</td><td>Imagine confirmed as print/fulfillment partner. Andy (albums), Andrew (stainless). GTA + USA facilities.</td></tr>
+    <tr><td>December 2025 peak: 236 confirmed delivery issues (40.8% of 578 Tier 1 total)</td><td>Front inbox analysis &mdash; v5.1 classifier, monthly distribution</td><td>December shows highest volume &mdash; cause not validated (could be holiday shipping, seasonal orders, or other factors). Cross-reference with order volume data. Monthly breakdown: Nov 74 (12.8%), Dec 236 (40.8%), Jan 155 (26.8%), Feb 113 (19.6%).</td></tr>
+    <tr><td>Observed complaint rate: 301 delivery conversations / estimated 1,833 shipments = ~16%; or 301 / 15,344 total conversations = 1.96%</td><td>Front inbox analysis &mdash; rate derivation</td><td>Higher than original 8-12% estimate &mdash; suggests the problem is larger than modeled. Imagine data needed to confirm actual shipment denominator.</td></tr>
+    <tr><td>Damage (3 matches) and stolen (9 matches) are rare in client communications</td><td>Front inbox analysis &mdash; v5.1 classifier</td><td>The primary problem is logistics (unclaimed 314, redelivery 144, non-receipt 107, wrong address 88) not theft or damage</td></tr>
+    <tr><td>30 false positives identified and excluded: 18 pre-production follow-ups, 7 retouching requests, 3 cancellations, 2 digital access, 2 production not started, 1 GTA internal, 1 general inquiry</td><td>Front inbox analysis &mdash; v5.1 classifier Tier 2</td><td>5% of originally flagged messages are not delivery issues. Classifier now distinguishes with zero unclassified messages.</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- APPENDIX C -->
+<h2>APPENDIX C: Per-City Delivery Analysis</h2>
+
+<div class="callout">
+  <strong>Note:</strong> Per-city shipment volumes are estimated proportionally from the 5,500 annual aggregate <span class="tag tag-derived">[ALL PER-CITY NUMBERS ARE DERIVED ESTIMATES]</span>. Actual per-city data should be pulled from Imagine as part of Decision #1. The failed delivery cost multiplier of 1.3-1.5x for cross-border shipments is also <span class="tag tag-est">[ESTIMATED]</span>.
+</div>
+
+<h3>City Overview</h3>
+
+<table>
+  <thead><tr><th>City</th><th>Country</th><th>Shipping from Imagine</th><th>Est. Annual Shipments</th><th>Cross-Border?</th><th>GoBolt Coverage</th><th>Tier 3 Pilot?</th><th>Key Considerations</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Toronto</strong></td><td>Canada</td><td>Domestic (Imagine GTA facility is local)</td><td>~1,100</td><td>No</td><td>Yes</td><td><strong>Yes (recommended)</strong></td><td>Lowest shipping cost, fastest transit. 11% refund rate is highest known signal. Ideal pilot city &mdash; isolates delivery issues from cross-border complexity.</td></tr>
+    <tr><td><strong>Montreal</strong></td><td>Canada</td><td>Domestic</td><td>~550</td><td>No</td><td>TBD</td><td>No (Phase 2)</td><td>French-language SMS/notifications required. GoBolt coverage unconfirmed &mdash; verify before Tier 2.</td></tr>
+    <tr><td><strong>Vancouver</strong></td><td>Canada</td><td>Domestic (long-haul)</td><td>~550</td><td>No</td><td>Yes</td><td>No</td><td>Longest domestic transit from GTA (Toronto). Higher damage risk due to distance. Consider West Coast print partner for Tier 3.</td></tr>
+    <tr><td><strong>Ottawa</strong></td><td>Canada</td><td>Domestic</td><td>~275</td><td>No</td><td>TBD</td><td>No</td><td>Smaller market. GoBolt coverage unconfirmed &mdash; may need UPS/FedEx as primary Tier 2 carrier.</td></tr>
+    <tr><td><strong>SoHo (NYC)</strong></td><td>USA</td><td>Cross-border</td><td>~1,100</td><td><strong>Yes</strong></td><td>Yes</td><td>No (Phase 2)</td><td>High-density urban delivery. Doorman buildings common &mdash; signature requirement is natural fit. Customs clearance on every shipment.</td></tr>
+    <tr><td><strong>Miami</strong></td><td>USA</td><td>Cross-border</td><td>~825</td><td><strong>Yes</strong></td><td>Yes</td><td><strong>Yes (recommended)</strong></td><td>Second pilot city &mdash; tests cross-border delivery chain. High-value market. HOA/condo mailroom exposure risk is elevated.</td></tr>
+    <tr><td><strong>Dallas</strong></td><td>USA</td><td>Cross-border</td><td>~550</td><td><strong>Yes</strong></td><td>Yes</td><td>No</td><td>Standard suburban delivery. Porch theft risk higher than urban locations.</td></tr>
+    <tr><td><strong>Houston</strong></td><td>USA</td><td>Cross-border</td><td>~550</td><td><strong>Yes</strong></td><td>Yes</td><td>No</td><td>Similar profile to Dallas. Combined TX volume (~1,100) may justify a regional carrier relationship.</td></tr>
+  </tbody>
+</table>
+
+<h3>Cross-Border Impact Summary</h3>
+
+<table>
+  <thead><tr><th>Factor</th><th>Canadian Cities (4)</th><th>US Cities (4)</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Estimated annual shipments</strong></td><td>~2,475 (45%)</td><td>~3,025 (55%)</td></tr>
+    <tr><td><strong>Shipping from Imagine</strong></td><td>Domestic (GTA facility)</td><td>Cross-border from GTA, OR domestic from US facility (pending confirmation)</td></tr>
+    <tr><td><strong>Customs/duties exposure</strong></td><td>None</td><td>HTS code dependent &mdash; Decision #6</td></tr>
+    <tr><td><strong>Return-to-sender cost</strong></td><td>Standard domestic</td><td>Double customs processing (ship + return)</td></tr>
+    <tr><td><strong>Failed delivery cost multiplier</strong></td><td>1x</td><td>~1.3-1.5x (customs, longer re-ship, duty exposure)</td></tr>
+    <tr><td><strong>Carrier options</strong></td><td>Canada Post, Purolator, GoBolt</td><td>UPS, FedEx, GoBolt, USPS</td></tr>
+    <tr><td><strong>Tier 1 implementation</strong></td><td>Straightforward</td><td>Requires customs broker alignment</td></tr>
+    <tr><td><strong>Tier 2 API integration</strong></td><td>Single-country</td><td>Must handle cross-border tracking handoff</td></tr>
+  </tbody>
+</table>
+
+<h3>Implications for Decision-Making</h3>
+
+<ol>
+  <li><strong>55% of shipments may cross an international border &mdash; pending Decision #8.</strong> Imagine operates facilities in both the GTA and the USA. If US orders ship from Imagine&rsquo;s US location, cross-border shipping may be minimal or eliminated. If all orders ship from the GTA facility, then 55% of Nuovo&rsquo;s delivery volume requires customs clearance. This single question changes the cost model for the majority of shipments.</li>
+  <li><strong>Toronto + Miami as Tier 3 pilots</strong> tests both the domestic and cross-border delivery chains. If it works in these two, it scales to all 8.</li>
+  <li><strong>Per-city non-delivery rates will vary significantly.</strong> Toronto (domestic, short transit from GTA facility) will likely have the lowest rate. Houston/Dallas (potentially cross-border, suburban, porch delivery) will likely have the highest. Imagine data pull should request per-city breakdowns &mdash; and clarify which facility ships to which cities.</li>
+  <li><strong>Montreal and Ottawa have unconfirmed GoBolt coverage.</strong> If GoBolt cannot serve these cities, UPS/FedEx Premium becomes the Tier 2 default for ~825 annual shipments. This does not break the model but changes the vendor mix.</li>
+  <li><strong>French-language requirement for Montreal</strong> affects Tier 1 SMS notifications and Tier 2 Client Journey Tracker. Budget an additional $500-$1,000 for bilingual implementation.</li>
+</ol>
+
+<hr>
+
+<!-- APPENDIX D -->
+<h2>APPENDIX D: Decision Dependency Graph</h2>
+
+<p>The following diagram shows which decisions block which. <strong>Start with the gold nodes on the left &mdash; those are the gates that unlock everything downstream.</strong></p>
+
+<div class="flow-diagram">
+  <!-- Row 1: D1 gates -->
+  <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:1.5rem; align-items:start; margin-bottom:2rem;">
+    <!-- Left: Gate decisions -->
+    <div style="display:flex; flex-direction:column; gap:1rem; align-items:center;">
+      <div class="flow-node gate">
+        D1: Pull Imagine Data
+        <span class="flow-owner">Jesse / Mar 3</span>
+      </div>
+      <div class="flow-node gate">
+        D3: Imagine API Check
+        <span class="flow-owner">Lucas / Mar 7</span>
+      </div>
+      <div class="flow-node gate">
+        D8: Printer Locations
+        <span class="flow-owner">Jesse / Mar 3</span>
+      </div>
+      <div class="flow-node gate">
+        D7: Insurance Path
+        <span class="flow-owner">Jesse / Mar 3</span>
+      </div>
+    </div>
+
+    <!-- Center: Arrows and labels -->
+    <div style="display:flex; flex-direction:column; gap:1rem; align-items:center; justify-content:center; padding-top:0.5rem;">
+      <div style="text-align:center;">
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-arrow-label">validates financial model</div>
+      </div>
+      <div style="text-align:center;">
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-arrow-label">hard gate</div>
+      </div>
+      <div style="text-align:center;">
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-arrow-label">determines cross-border scope</div>
+      </div>
+    </div>
+
+    <!-- Right: Blocked decisions -->
+    <div style="display:flex; flex-direction:column; gap:1rem; align-items:center;">
+      <div class="flow-node blocked">
+        D4: Tier 2 Budget
+        <span class="flow-owner">Jesse / Mar 7</span>
+      </div>
+      <div class="flow-node blocked">
+        D5: Pilot Cities
+        <span class="flow-owner">Jesse / Mar 14</span>
+      </div>
+      <div class="flow-node blocked">
+        D6: Customs Broker
+        <span class="flow-owner">Saby / Mar 3</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Independent decisions -->
+  <div style="display:flex; gap:1rem; justify-content:center; margin-top:1rem; padding-top:1rem; border-top:1px dashed var(--border);">
+    <div class="flow-node independent">
+      D2: Packaging Spec
+      <span class="flow-owner">Jesse / Mar 3</span>
+    </div>
+    <div class="flow-node independent">
+      D9: Mismatch QA
+      <span class="flow-owner">Ops / Ongoing</span>
+    </div>
+  </div>
+
+  <!-- Dependency detail table -->
+  <div style="margin-top:1.5rem; font-size:0.8rem;">
+    <table>
+      <thead><tr><th>From</th><th>To</th><th>Dependency</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--gold);">D1</td><td style="color:var(--red);">D4</td><td>Validates financial model</td></tr>
+        <tr><td style="color:var(--gold);">D1</td><td style="color:var(--red);">D5</td><td>Confirms rate for pilot</td></tr>
+        <tr><td style="color:var(--gold);">D1</td><td style="color:var(--gold);">D7</td><td>Confirms insurance need</td></tr>
+        <tr><td style="color:var(--gold);">D3</td><td style="color:var(--red);">D4</td><td>Hard gate</td></tr>
+        <tr><td style="color:var(--gold);">D8</td><td style="color:var(--red);">D6</td><td>Determines cross-border scope</td></tr>
+        <tr><td style="color:var(--gold);">D8</td><td style="color:var(--red);">D4</td><td>Changes cost model</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<p><strong>Reading this diagram:</strong></p>
+<ul>
+  <li><span style="color:var(--gold); font-weight:700;">Gold = Gate decisions</span> &mdash; these must resolve first. D1 (Imagine data), D3 (API check), D7 (insurance path), and D8 (printer locations) are the four gates.</li>
+  <li><span style="color:var(--red); font-weight:700;">Red = Blocked</span> &mdash; D4 (Tier 2 budget) can&rsquo;t be approved until D1, D3, and D8 resolve. D5 (pilot cities) waits on D1. D6 (customs broker) waits on D8.</li>
+  <li><span style="color:var(--green); font-weight:700;">Green = Independent</span> &mdash; D2 (packaging spec) and D9 (mismatch QA) can proceed immediately with no dependencies.</li>
+</ul>
+
+<p><strong>Critical path:</strong> D1 + D3 + D8 &rarr; D4 &rarr; D5. If any gate decision slips past its deadline, the Tier 2 budget decision on March 7 is at risk.</p>
+
+<hr>
+
+<!-- Supporting Analysis -->
+<h2>Supporting Analysis (On File)</h2>
+
+<table>
+  <thead><tr><th>Document</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>delivery-brief-v3-red-team.md</code></td><td>Adversarial analysis of v3 claims and assumptions</td></tr>
+    <tr><td><code>delivery-brief-v3-quality-scorecard.md</code></td><td>Quality gate assessment &mdash; scored 8.6/10</td></tr>
+    <tr><td><code>delivery-brief-v3-math-verification.md</code></td><td>Mathematical verification of all financial claims</td></tr>
+    <tr><td><code>delivery-brief-v3-delta-check.md</code></td><td>V2-to-V3 issue tracking matrix (24 of 32 resolved)</td></tr>
+    <tr><td><code>delivery-brief-v3-vendor-validation.md</code></td><td><strong>Vendor research and fact-check &mdash; pricing, coverage, per-city suppliers with 20+ sourced links</strong></td></tr>
+    <tr><td><code>front_delivery_classified.csv</code></td><td>Full Front inbox classification (40,967 messages, delivery_issue Yes/No column)</td></tr>
+    <tr><td><code>front_delivery_issues_only.csv</code></td><td>Filtered delivery issues only (608 messages with Front conversation/message IDs)</td></tr>
+    <tr><td><code>front_delivery_issues_enriched.csv</code></td><td>V5.1 classified: 608 messages with tier assignment, categories (multi-label), Excel row mapping, and text snippets. 578 Tier 1 (delivery), 30 Tier 2 (false positive), 0 unclassified.</td></tr>
+    <tr><td><a href="https://jkausel-ai.github.io/nuovo-delivery-report/">Front Delivery Issue Report</a></td><td>Interactive visual report with methodology, category breakdown, monthly trends, and reference examples</td></tr>
+    <tr><td><code>r4_FINAL_evidence_backed.csv</code></td><td>Evidence-backed client action list &mdash; 117 unique people with lifecycle states, evidence quotes, and 3-tier classification (v3.7)</td></tr>
+    <tr><td><code>r4_entity_resolved.csv</code></td><td>Entity resolution: 135 raw records &rarr; 117 unique people, 18 cross-channel duplicates identified with match evidence (v3.7)</td></tr>
+    <tr><td><code>r4_lifecycle_states.csv</code></td><td>Lifecycle state machine: per-conversation current status with chronological signal detection (v3.7)</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- Footer -->
+<div class="footer">
+  <p><em>Prepared by Justin Kausel, Consultant &mdash; February 25, 2026 (Updated February 26, 2026)</em></p>
+  <p style="font-size:0.75rem; margin-top:0.5rem;">Version 3.7 &mdash; Entity resolution (135&rarr;117 unique people, 18 cross-channel duplicates) + lifecycle state machine (8 confirmed resolved, 109 evidence-backed unresolved). Three-tier evidence model: 34 confirmed unresolved + 69 likely unresolved + 6 needs follow-up. Reconciliation with Catherine&rsquo;s ~70 estimate. Canon compliance maintained. All prior v3.6 content preserved.</p>
+  <div class="cortex-badge">Prepared by ClaudeOS &bull; CORTEX v4.0</div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+(function() {
+  var toggle = document.getElementById('themeToggle');
+  var html = document.documentElement;
+  var stored = localStorage.getItem('nuovo-brief-theme');
+  if (stored) {
+    html.setAttribute('data-theme', stored);
+  }
+  function updateIcon() {
+    var theme = html.getAttribute('data-theme');
+    toggle.textContent = theme === 'dark' ? '\u263E' : '\u2600';
+  }
+  updateIcon();
+  toggle.addEventListener('click', function() {
+    var current = html.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('nuovo-brief-theme', next);
+    updateIcon();
+  });
+})();
+</script>
+
+</body>
+</html>
