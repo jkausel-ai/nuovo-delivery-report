@@ -62,7 +62,7 @@
 <button class="theme-toggle" onclick="toggleTheme()"><span class="icon" id="themeIcon">&#9790;</span><span id="themeLabel">Light</span></button>
 
 <h1>Front Inbox Delivery Issue Analysis</h1>
-<p class="subtitle">Nuovo Artistic Studios | Prepared for Matthew (Data Engineering) | February 26, 2026</p>
+<p class="subtitle">Nuovo Artistic Studios | Prepared for Matthew (Data Engineering) | February 26, 2026 | Updated: v2.0</p>
 
 <div class="meta">
   <div class="meta-grid">
@@ -81,6 +81,13 @@
   <div class="stat-card"><div class="val">608</div><div class="label">Delivery Issues (Yes)</div></div>
   <div class="stat-card"><div class="val">1.48%</div><div class="label">Delivery Issue Rate</div></div>
   <div class="stat-card"><div class="val">327</div><div class="label">Unique Conversations*</div></div>
+</div>
+
+<div class="stat-grid" style="margin-top: 0.5rem;">
+  <div class="stat-card"><div class="val">117</div><div class="label">Unique People (Entity-Resolved)</div></div>
+  <div class="stat-card"><div class="val">109</div><div class="label">Unresolved Clients</div></div>
+  <div class="stat-card"><div class="val">8</div><div class="label">Confirmed Resolved</div></div>
+  <div class="stat-card"><div class="val">18</div><div class="label">Cross-Channel Duplicates</div></div>
 </div>
 
 <div class="callout">
@@ -241,6 +248,9 @@
   <tr><th>File</th><th>Description</th><th>Rows</th><th>Size</th></tr>
   <tr><td><code>front_delivery_classified.csv</code></td><td>Full dataset &mdash; all 40,967 messages with <code>delivery_issue</code> column (Yes/No)</td><td>40,967</td><td>117 MB</td></tr>
   <tr><td><code>front_delivery_issues_only.csv</code></td><td>Filtered to delivery issues only</td><td>608</td><td>1.3 MB</td></tr>
+  <tr><td><code>r4_FINAL_evidence_backed.csv</code></td><td>Entity-resolved client action list with evidence &mdash; 25 columns, 3-tier classification</td><td>117</td><td>&mdash;</td></tr>
+  <tr><td><code>r4_entity_resolved.csv</code></td><td>Entity resolution deduplication output</td><td>117</td><td>&mdash;</td></tr>
+  <tr><td><code>r4_lifecycle_states.csv</code></td><td>Lifecycle state machine per-conversation output</td><td>135</td><td>&mdash;</td></tr>
 </table>
 
 <h3>CSV Column Schema</h3>
@@ -269,6 +279,72 @@
   <li><strong>Multi-message conversations:</strong> A single delivery issue may span multiple messages in the same conversation. The 608 count is messages, not unique incidents. 327 is the exact count of distinct <code>conversation_id</code> values in the 608 flagged messages. This is a better proxy for unique delivery issues than the raw message count, but 327 conversations does not necessarily equal 327 unique incidents &mdash; a single client may open multiple conversations about the same issue (inflating the count), and some flagged conversations may be false positives. Validate against GTA Imaging fulfillment data for a definitive incident count.</li>
 </ul>
 
+
+<!-- ───────────── ENTITY RESOLUTION ───────────── -->
+<h2>Entity Resolution: Messages &rarr; People</h2>
+
+<div class="callout">
+  <strong>Why This Matters:</strong> The 608 classified messages span 327 conversations, but conversations are not people. One person can appear in multiple Front threads &mdash; a direct Nuovo&harr;Client email AND a separate Nuovo&harr;GTA coordination thread about the same client. Entity resolution consolidates to the unit that matters: <strong>unique people waiting for their prints</strong>.
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="val">135</div><div class="label">Raw Delivery Client Records</div></div>
+  <div class="stat-card"><div class="val">18</div><div class="label">Cross-Channel Duplicates</div></div>
+  <div class="stat-card"><div class="val">117</div><div class="label">Unique People</div></div>
+  <div class="stat-card"><div class="val">99.1%</div><div class="label">Named (134/135)</div></div>
+</div>
+
+<h3>Cross-Channel Duplicate Detection</h3>
+<p style="font-size: 0.85rem;">18 clients were found in BOTH a direct email thread AND a GTA printer coordination thread. Match types:</p>
+<table>
+  <tr><th>Match Type</th><th>Count</th><th>Confidence</th></tr>
+  <tr><td>Exact name match across channels</td><td>7</td><td>HIGH</td></tr>
+  <tr><td>Name match with supporting evidence</td><td>11</td><td>MEDIUM</td></tr>
+</table>
+
+<h3>Email Channel Breakdown</h3>
+<table>
+  <tr><th>Channel Type</th><th>Count</th><th>Description</th></tr>
+  <tr><td>Client email (direct)</td><td>88</td><td>Client's personal email in <code>recipient_handle</code></td></tr>
+  <tr><td>GTA Imaging (printer)</td><td>47</td><td><code>hello@gtaimaging.com</code> &mdash; client name in subject line only</td></tr>
+</table>
+
+<!-- ───────────── LIFECYCLE TRACKING ───────────── -->
+<h2>Lifecycle State Machine: Current Status</h2>
+
+<div class="callout">
+  <strong>Key Distinction:</strong> A text classifier answers &ldquo;was delivery ever mentioned?&rdquo; A lifecycle tracker answers &ldquo;did they actually get their prints?&rdquo; These are fundamentally different questions. The state machine walks through each client's messages chronologically, tracking transitions (shipped &rarr; returned &rarr; reshipped &rarr; received) to determine <strong>current</strong> status.
+</div>
+
+<div style="margin: 1rem 0;">
+  <div class="bar-row"><span class="bar-label">Reshipped (unconfirmed)</span><div class="bar-track"><div class="bar-fill" style="width:100%">85</div></div><span class="bar-count">85</span></div>
+  <div class="bar-row"><span class="bar-label">Not Received</span><div class="bar-track"><div class="bar-fill" style="width:16.5%">14</div></div><span class="bar-count">14</span></div>
+  <div class="bar-row"><span class="bar-label">Confirmed Received</span><div class="bar-track"><div class="bar-fill" style="width:9.4%;background:var(--green)">8</div></div><span class="bar-count">8</span></div>
+  <div class="bar-row"><span class="bar-label">Stale / Unknown</span><div class="bar-track"><div class="bar-fill" style="width:7.1%;background:var(--yellow)">6</div></div><span class="bar-count">6</span></div>
+  <div class="bar-row"><span class="bar-label">Returned (no reship)</span><div class="bar-track"><div class="bar-fill" style="width:4.7%;background:var(--red)">4</div></div><span class="bar-count">4</span></div>
+</div>
+
+<h3>Three-Tier Evidence Model: 109 Unresolved Clients</h3>
+
+<table>
+  <tr><th>Tier</th><th>Classification</th><th>Count</th><th>Evidence Standard</th><th>Action</th></tr>
+  <tr><td style="font-weight:700;color:var(--red);">1</td><td>CONFIRMED UNRESOLVED</td><td>34</td><td>Client explicitly states non-receipt, or item returned with no reshipping</td><td>Immediate follow-up</td></tr>
+  <tr><td style="font-weight:700;color:var(--yellow);">2</td><td>LIKELY UNRESOLVED</td><td>69</td><td>Item reshipped but no confirmation of receipt from client</td><td>Proactive outreach</td></tr>
+  <tr><td style="font-weight:700;color:var(--blue);">3</td><td>NEEDS FOLLOW-UP</td><td>6</td><td>Stale thread (&gt;30 days no activity), status unclear</td><td>Proactive outreach</td></tr>
+</table>
+
+<h3>Reconciliation with Catherine's ~70 Estimate</h3>
+<div class="callout">
+  <strong>Catherine's ~70 aligns with Tier 1 (34) + a subset of Tier 2 (~30-40).</strong> The remaining Tier 2 clients likely received their reshipped items but never emailed confirmation. Front inbox data cannot resolve this ambiguity &mdash; GTA Imaging delivery records are needed for definitive status on 69 Tier 2 cases.
+</div>
+
+<h3>Output Files (Entity-Resolved)</h3>
+<table>
+  <tr><th>File</th><th>Description</th><th>Rows</th></tr>
+  <tr><td><code>r4_FINAL_evidence_backed.csv</code></td><td>Definitive client action list &mdash; 117 unique people with evidence quotes, lifecycle states, 3-tier classification, 25 columns</td><td>117</td></tr>
+  <tr><td><code>r4_entity_resolved.csv</code></td><td>Entity resolution output &mdash; deduplication details and match evidence</td><td>117</td></tr>
+  <tr><td><code>r4_lifecycle_states.csv</code></td><td>Per-conversation lifecycle state machine output</td><td>135</td></tr>
+</table>
 
 <!-- ───────────── APPENDIX: ALL 608 MESSAGES ───────────── -->
 <h2 id="appendix">Appendix: Full Message Classification Reference</h2>
@@ -377,7 +453,7 @@ renderAppendix();
 
 <div class="footer">
   <p>Nuovo Artistic Studios &mdash; Front Inbox Delivery Issue Analysis</p>
-  <p>Source: <code>front.xlsx</code> (Meeting Feb 25th/After Service/) | Classified: February 26, 2026</p>
+  <p>Source: <code>front.xlsx</code> (Meeting Feb 25th/After Service/) | Classified: February 26, 2026 | Entity-Resolved: February 26, 2026</p>
   <p style="margin-top: 0.5rem;">Prepared by ClaudeOS &bull; CORTEX v4.0</p>
 </div>
 
