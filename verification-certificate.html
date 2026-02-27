@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Verification Certificate — Nuovo Delivery Client Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===================================================================
+       CSS Custom Properties — Dark & Light Themes
+       =================================================================== */
+    :root {
+      --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --gold: #c8a96e;
+      --gold-light: #d4b97e;
+      --gold-dark: #a8894e;
+      --transition: 0.3s ease;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #141414;
+      --bg-card: #1a1a1a;
+      --bg-card-alt: #1e1e1e;
+      --bg-table-stripe: #151515;
+      --text-primary: #e8e6e1;
+      --text-secondary: #a0a0a0;
+      --text-muted: #6a6a6a;
+      --border: #2a2a2a;
+      --border-light: #333333;
+      --shadow: rgba(0, 0, 0, 0.4);
+      --code-bg: #1e1e1e;
+      --blockquote-bg: #141418;
+      --blockquote-border: #c8a96e;
+      --verified-bg: rgba(46, 204, 113, 0.08);
+      --lowconf-bg: rgba(243, 156, 18, 0.08);
+      --flagged-bg: rgba(231, 76, 60, 0.08);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f5f3ef;
+      --bg-secondary: #eae7e1;
+      --bg-card: #ffffff;
+      --bg-card-alt: #faf9f7;
+      --bg-table-stripe: #f0ede8;
+      --text-primary: #1a1a2e;
+      --text-secondary: #4a4a5a;
+      --text-muted: #8a8a9a;
+      --border: #d5d0c8;
+      --border-light: #e0dbd3;
+      --shadow: rgba(0, 0, 0, 0.08);
+      --code-bg: #f0ede8;
+      --blockquote-bg: #faf8f4;
+      --blockquote-border: #c8a96e;
+      --verified-bg: rgba(46, 204, 113, 0.08);
+      --lowconf-bg: rgba(243, 156, 18, 0.08);
+      --flagged-bg: rgba(231, 76, 60, 0.08);
+    }
+
+    /* ===================================================================
+       Reset & Base
+       =================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      transition: background var(--transition), color var(--transition);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ===================================================================
+       Layout
+       =================================================================== */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    section {
+      margin: 3rem 0;
+      padding: 2.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px var(--shadow);
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    section h2 {
+      font-family: var(--font-heading);
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.01em;
+    }
+
+    .section-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ===================================================================
+       Theme Toggle
+       =================================================================== */
+    .theme-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 1000;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--gold);
+      transform: scale(1.05);
+    }
+
+    /* ===================================================================
+       Header
+       =================================================================== */
+    header {
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      position: relative;
+    }
+
+    .certificate-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+      color: #0a0a0a;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.45rem 1.8rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    header h1 {
+      font-family: var(--font-heading);
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+
+    header .subtitle {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    header .date {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* ===================================================================
+       Grade Display
+       =================================================================== */
+    .grade-display {
+      text-align: center;
+      margin: 2rem 0 3rem;
+      padding: 3rem 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+
+    .grade-circle {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 6px solid #27ae60;
+      background: var(--bg-secondary);
+      box-shadow: 0 0 40px rgba(200, 169, 110, 0.1);
+      transition: all var(--transition);
+    }
+
+    .grade-letter {
+      font-family: var(--font-heading);
+      font-size: 4rem;
+      font-weight: 700;
+      color: #27ae60;
+      line-height: 1;
+    }
+
+    .grade-score {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    .grade-label {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-top: 1.25rem;
+      font-weight: 500;
+    }
+
+    /* ===================================================================
+       Scorecard Grid
+       =================================================================== */
+    .scorecard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .metric-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+      transition: all var(--transition);
+    }
+
+    .metric-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px var(--shadow);
+    }
+
+    .metric-value {
+      font-family: var(--font-heading);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.1;
+    }
+
+    .metric-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-weight {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    .metric-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+
+    /* ===================================================================
+       Classification Distribution
+       =================================================================== */
+    .dist-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .dist-row {
+      display: grid;
+      grid-template-columns: 200px 1fr 120px;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .dist-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dist-bar-container {
+      height: 24px;
+      background: var(--bg-secondary);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .dist-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+      border-radius: 5px;
+      min-width: 2px;
+      transition: width 0.6s ease;
+    }
+
+    .dist-count {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ===================================================================
+       Audit Trail Table
+       =================================================================== */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .audit-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .audit-table thead {
+      background: var(--bg-secondary);
+    }
+
+    .audit-table th {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .audit-table td {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .audit-table tbody tr:nth-child(even) {
+      background: var(--bg-table-stripe);
+    }
+
+    .audit-table tbody tr:hover {
+      background: rgba(200, 169, 110, 0.04);
+    }
+
+    .evidence-excerpt {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      max-width: 320px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .verdict-cell {
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    .verdict-icon {
+      font-size: 1rem;
+    }
+
+    .verdict-row-verified {
+      /* subtle green tint */
+    }
+
+    .verdict-row-flagged td:first-child {
+      border-left: 3px solid #e74c3c;
+    }
+
+    .verdict-row-low_confidence td:first-child {
+      border-left: 3px solid #f39c12;
+    }
+
+    /* ===================================================================
+       Deep-Dive Cards
+       =================================================================== */
+    .sample-info {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .deep-dive-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      transition: all var(--transition);
+    }
+
+    .deep-dive-card:hover {
+      border-color: var(--border-light);
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+
+    .dd-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .dd-entity {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .dd-classification {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .dd-confidence {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .confidence-bar {
+      flex: 1;
+      height: 20px;
+      background: var(--bg-primary);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border);
+    }
+
+    .confidence-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.6s ease;
+    }
+
+    .confidence-label {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .dd-evidence {
+      background: var(--blockquote-bg);
+      border-left: 3px solid var(--blockquote-border);
+      padding: 1rem 1.25rem;
+      margin: 0.75rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .dd-explanation {
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      line-height: 1.6;
+      margin: 0.75rem 0;
+    }
+
+    .signals-row {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .signals-row strong {
+      color: var(--text-secondary);
+      margin-right: 0.25rem;
+    }
+
+    .signal-match {
+      display: inline-block;
+      background: rgba(46, 204, 113, 0.15);
+      color: #2ecc71;
+      border: 1px solid rgba(46, 204, 113, 0.3);
+      padding: 0.15rem 0.6rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .signal-conflict {
+      display: inline-block;
+      background: rgba(231, 76, 60, 0.15);
+      color: #e74c3c;
+      border: 1px solid rgba(231, 76, 60, 0.3);
+      padding: 0.15rem 0.6rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    /* ===================================================================
+       Spot-Check Cards
+       =================================================================== */
+    .spot-check-card {
+      background: var(--bg-secondary);
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      transition: all var(--transition);
+      box-shadow: 0 0 12px rgba(200, 169, 110, 0.08);
+    }
+
+    .spot-check-card:hover {
+      box-shadow: 0 0 20px rgba(200, 169, 110, 0.15);
+    }
+
+    .spot-check-card .dd-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .spot-check-card .dd-entity {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    .spot-check-missing {
+      border-color: var(--border);
+      opacity: 0.7;
+    }
+
+    .spot-check-missing .dd-entity {
+      color: var(--text-muted);
+    }
+
+    /* ===================================================================
+       Methodology & Limitations
+       =================================================================== */
+    #methodology h3, #methodology h4, #methodology h5, #methodology h6,
+    #limitations h3, #limitations h4, #limitations h5, #limitations h6 {
+      font-family: var(--font-heading);
+      color: var(--text-primary);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    #methodology h3, #limitations h3 { font-size: 1.25rem; }
+    #methodology h4, #limitations h4 { font-size: 1.1rem; }
+
+    #methodology p, #limitations p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      line-height: 1.7;
+    }
+
+    #methodology ul, #limitations ul {
+      margin: 0.5rem 0 1rem 1.5rem;
+    }
+
+    #methodology li, #limitations li {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.35rem;
+      line-height: 1.6;
+    }
+
+    #methodology code, #limitations code {
+      background: var(--code-bg);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      color: var(--gold);
+    }
+
+    #methodology pre, #limitations pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 0.75rem 0;
+    }
+
+    #methodology pre code, #limitations pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.82rem;
+    }
+
+    #methodology hr, #limitations hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.5rem 0;
+    }
+
+    #methodology strong, #limitations strong {
+      color: var(--text-primary);
+    }
+
+    /* ===================================================================
+       No-Data Placeholder
+       =================================================================== */
+    .no-data {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.9rem;
+      padding: 1.5rem;
+      text-align: center;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      border: 1px dashed var(--border);
+    }
+
+    /* ===================================================================
+       Footer
+       =================================================================== */
+    footer {
+      margin-top: 3rem;
+      padding: 2.5rem 0;
+    }
+
+    .cert-footer {
+      text-align: center;
+      padding: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+
+    .cert-footer p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cert-footer .cortex-footer {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      color: var(--gold);
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ===================================================================
+       Responsive
+       =================================================================== */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      .scorecard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dist-row {
+        grid-template-columns: 1fr;
+        gap: 0.3rem;
+      }
+
+      .dist-label {
+        font-size: 0.8rem;
+      }
+
+      .dist-count {
+        text-align: left;
+        font-size: 0.75rem;
+      }
+
+      section {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .grade-circle {
+        width: 150px;
+        height: 150px;
+      }
+
+      .grade-letter {
+        font-size: 3rem;
+      }
+
+      .audit-table {
+        font-size: 0.75rem;
+      }
+
+      .audit-table th, .audit-table td {
+        padding: 0.5rem 0.6rem;
+      }
+
+      .evidence-excerpt {
+        max-width: 160px;
+      }
+    }
+
+    /* ===================================================================
+       Print Styles
+       =================================================================== */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #1a1a2e !important;
+        font-size: 11pt;
+      }
+
+      .theme-toggle {
+        display: none !important;
+      }
+
+      section {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #d0d0d0;
+        background: #ffffff;
+      }
+
+      section h2 {
+        color: #8a7448;
+      }
+
+      .grade-circle {
+        border-width: 4px;
+      }
+
+      .metric-card {
+        background: #f8f8f8;
+        border: 1px solid #d0d0d0;
+      }
+
+      .metric-value {
+        color: #8a7448;
+      }
+
+      .deep-dive-card, .spot-check-card {
+        background: #f8f8f8;
+        border: 1px solid #d0d0d0;
+        break-inside: avoid;
+      }
+
+      .spot-check-card {
+        border-color: #c8a96e;
+      }
+
+      .audit-table th {
+        background: #f0f0f0;
+      }
+
+      .cert-footer {
+        background: #f8f8f8;
+        border: 1px solid #d0d0d0;
+      }
+
+      .cortex-footer {
+        color: #8a7448 !important;
+      }
+
+      a {
+        color: #1a1a2e;
+        text-decoration: none;
+      }
+
+      .dist-bar {
+        background: #c8a96e !important;
+      }
+
+      .confidence-fill {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .signal-match, .signal-conflict {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <span id="themeIcon">&#9790;</span>
+  </button>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header>
+      <div class="certificate-badge">VERIFIED</div>
+      <h1>Data Verification Certificate</h1>
+      <p class="subtitle">Nuovo Delivery Client Analysis &#8212; 117 records</p>
+      <p class="date">Generated 2026-02-27 02:32 UTC</p>
+    </header>
+
+    <!-- Overall Grade -->
+    <section class="grade-display">
+      <div class="grade-circle" style="border-color: #27ae60">
+        <span class="grade-letter" style="color: #27ae60">B+</span>
+        <span class="grade-score">87.9/100</span>
+      </div>
+      <p class="grade-label">Data Integrity Score</p>
+    </section>
+
+    <!-- Scorecard -->
+    <section id="scorecard">
+      <h2>Integrity Scorecard</h2>
+      <p class="section-desc">Three weighted metrics that determine the overall grade</p>
+      <div class="scorecard-grid">
+<div class="metric-card"><div class="metric-value">100.0%</div><div class="metric-label">Source Evidence Rate</div><div class="metric-weight">Weight: 30%</div><div class="metric-desc">Rows with evidence quote + source ID</div></div>
+<div class="metric-card"><div class="metric-value">81.2%</div><div class="metric-label">Classification Match Rate</div><div class="metric-weight">Weight: 50%</div><div class="metric-desc">Rows where classification is signal-verified</div></div>
+<div class="metric-card"><div class="metric-value">86.3%</div><div class="metric-label">Conflict-Free Rate</div><div class="metric-weight">Weight: 20%</div><div class="metric-desc">Rows with no conflicting signals detected</div></div>
+</div>
+    </section>
+
+    <!-- Classification Distribution -->
+    <section id="distribution">
+      <h2>Classification Distribution</h2>
+      <p class="section-desc">Breakdown of all classification labels in the dataset</p>
+      <div class="dist-grid">
+<div class="dist-row"><div class="dist-label">LIKELY_UNRESOLVED</div><div class="dist-bar-container"><div class="dist-bar" style="width: 59.0%;"></div></div><div class="dist-count">69 (59.0%)</div></div>
+<div class="dist-row"><div class="dist-label">CONFIRMED_UNRESOLVED</div><div class="dist-bar-container"><div class="dist-bar" style="width: 29.1%;"></div></div><div class="dist-count">34 (29.1%)</div></div>
+<div class="dist-row"><div class="dist-label">RESOLVED</div><div class="dist-bar-container"><div class="dist-bar" style="width: 6.8%;"></div></div><div class="dist-count">8 (6.8%)</div></div>
+<div class="dist-row"><div class="dist-label">NEEDS_FOLLOW_UP</div><div class="dist-bar-container"><div class="dist-bar" style="width: 5.1%;"></div></div><div class="dist-count">6 (5.1%)</div></div>
+</div>
+    </section>
+
+    <!-- Full Audit Trail -->
+    <section id="audit-trail">
+      <h2>Full Audit Trail</h2>
+      <p class="section-desc">Every row in the dataset with its verification status</p>
+      <div class="table-wrapper">
+<table class="audit-table">
+<thead><tr>
+<th>Row</th>
+<th>Entity Name</th>
+<th>Evidence (excerpt)</th>
+<th>Classification</th>
+<th>Verdict</th>
+</tr></thead>
+<tbody>
+<tr class="verdict-row-verified"><td>1</td><td>Laura Muras</td><td class="evidence-excerpt">Hi Tania,
+
+Thanks for following up!
+
+Here is the new tracking for this reshipmen...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>2</td><td>Shaniece Williams</td><td class="evidence-excerpt">Hi Tania,
+
+Thanks for following up with an updated address.
+
+Here is the trackin...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>3</td><td>Shyann W</td><td class="evidence-excerpt">Hi Shyann!! 
+
+
+Here is the new tracking information for your package! 
+https://t...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>4</td><td>Therese B</td><td class="evidence-excerpt">Hi Therese, 
+
+
+I hope you&#x27;re doing well!
+
+
+We have been provided with the follow...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>5</td><td>Christa</td><td class="evidence-excerpt">Kat,I received my portrait but I haven&#x27;t received my album. When will that arriv...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>6</td><td>Yania</td><td class="evidence-excerpt">Hi Yania, 
+
+
+Thanks so much for sending that over to me, 
+
+
+I have just sent you...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>7</td><td>Isabella H</td><td class="evidence-excerpt">Hi Isabella, 
+
+
+Here is the new tracking link for your item! 
+https://tools.usps...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>8</td><td>Ramona E</td><td class="evidence-excerpt">Hi again,
+
+Thanks for reconfirming the address! Here is the new tracking for thi...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>9</td><td>Mackenzie C</td><td class="evidence-excerpt">Hi Fiona,
+
+Sorry for the late reply.
+
+Thanks for reconfirming the shipping addre...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>10</td><td>Dana C</td><td class="evidence-excerpt">Hi Victoria,
+
+Thanks for reconfirming the shipping address. Here is the new trac...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>11</td><td>Jessica W</td><td class="evidence-excerpt">Hi Pauline,
+
+Thanks for following up!
+
+Here is the new tracking reshipping to th...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>12</td><td>Shayla Peneku</td><td class="evidence-excerpt">Fantastic! I forwarded the tracking information to this client as well. 
+
+
+Thank...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>13</td><td>DeAndra Lockett</td><td class="evidence-excerpt">Hi Alejandra,
+
+Thanks for confirming the address. Here is the new tracking for t...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>14</td><td>Vanessa</td><td class="evidence-excerpt">Hi Vanessa,
+
+
+I hope all is well!
+
+
+Here is the tracking link for the re-shipmen...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-low_confidence"><td>15</td><td>Jodi</td><td class="evidence-excerpt">Good evening,
+
+
+Thank you so much as that truly means a lot. I’m really glad we ...</td><td>NEEDS_FOLLOW_UP</td><td class="verdict-cell"><span class="verdict-icon verdict-lowconf">⚠️</span></td></tr>
+<tr class="verdict-row-verified"><td>16</td><td>Peggy</td><td class="evidence-excerpt">I do not know why its a issue because i got my big picture 
+
+Sent from my iPhone</td><td>RESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>17</td><td>McKinley</td><td class="evidence-excerpt">Hi McKinley,
+
+
+I hope you&#x27;re doing well!
+We have been provided with the followin...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>18</td><td>Dennisse G</td><td class="evidence-excerpt">Hi Dennisse,
+
+
+I apologize for just seeing your email now. I looked into your tr...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>19</td><td>Alyssa</td><td class="evidence-excerpt">Hi Alyssa,
+
+
+We&#x27;re just reaching out as your album has been sent back to sender ...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>20</td><td>Jana</td><td class="evidence-excerpt">Hi Jana,
+
+
+I hope you&#x27;re doing well!
+We have been provided with the following in...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>21</td><td>Bethany</td><td class="evidence-excerpt">Hi Bethany,
+
+
+Please don’t apologize at all — I’m so sorry to hear how hard this...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>22</td><td>Michelle Anderson</td><td class="evidence-excerpt">Hi,
+
+I hope you’re having a wonderful day! 💖
+
+Ready for some exciting news? Your...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>23</td><td></td><td class="evidence-excerpt">Hi there,
+
+
+I hope all is well.
+
+
+I see that your album hasn&#x27;t arrived at the st...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>24</td><td>Beatriz</td><td class="evidence-excerpt">Hi Beatriz!! 
+
+
+Here is the tracking information for your stainless!! 
+
+
+1ZV5241...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>25</td><td>Melinda Li</td><td class="evidence-excerpt">Hi there!
+
+
+I just want to confirm they have reshipped your album with your frie...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>26</td><td>Vanessa</td><td class="evidence-excerpt">Hi Vanessa!
+
+
+I saw that you were able to reschedule the delivery — that’s great...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>27</td><td>Mariana Philippou</td><td class="evidence-excerpt">Hi Alejandra,
+
+Thanks for following up and providing an updated address!
+
+Here i...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>28</td><td>Brittani</td><td class="evidence-excerpt">Hi Brittani, 
+
+
+Thank you for reaching out to us. 
+
+
+I have consulted with our s...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>29</td><td>Jenniffer Lopez</td><td class="evidence-excerpt">Hi Jennifer, 
+
+
+I hope you’re doing well as we step into the new year ✨
+
+
+I am f...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>30</td><td>Mercedes Sanchez</td><td class="evidence-excerpt">Hello my name is Mercedes Sanchez I have a issue I ordered a digital photo
+from ...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>31</td><td>On Fri</td><td class="evidence-excerpt">Hi Lexi!
+
+
+We hope you&#x27;ve been good 🥰
+
+
+The printing company let us know they ha...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>32</td><td>Marcela</td><td class="evidence-excerpt">Good afternoon Marcela,
+
+
+Absolutely, thank you for confirming! We’ll have it sh...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>33</td><td>Marjory Marc</td><td class="evidence-excerpt">Hi!
+
+
+Here is your updated shipping information!
+
+
+https://tools.usps.com/go/Tra...</td><td>RESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>34</td><td>Andrea</td><td class="evidence-excerpt">Hello if this is the book . It was delivered to me</td><td>RESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>35</td><td>Marie Mckinney</td><td class="evidence-excerpt">Hi Marie, 
+
+
+I hope you&#x27;re having a wonderful start to your week! ✨
+
+
+Thank you ...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>36</td><td>Joya</td><td class="evidence-excerpt">I picked it up today.
+
+Thank you, when can I expect my wall picture.</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>37</td><td>Shianne Creighton</td><td class="evidence-excerpt">Hi Victoria,
+
+Thanks for following up  and reconfirming the address. Here is the...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>38</td><td>Cassandra</td><td class="evidence-excerpt">Hello!
+
+Do you, by chance, have any updates on the package?
+
+This is all the inf...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>39</td><td>Jennifer Forbes</td><td class="evidence-excerpt">Hi again,
+
+Here is the new tracking reshipping to the Miami Studio - https://too...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>40</td><td>Maya Sanchez</td><td class="evidence-excerpt">Hi Alejandra,
+
+Here is the new tracking reshipping to the Miami Studio - https:/...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>41</td><td>Kayden</td><td class="evidence-excerpt">Hello Kayden, 
+
+
+I wanted to let you know that your album as been re-shipped to ...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>42</td><td>Jolene</td><td class="evidence-excerpt">Hi Jolene, 
+
+
+I checked the tracking information myself and it says your package...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>43</td><td>Mallory G</td><td class="evidence-excerpt">Hi there,
+
+
+Here is the new tracking reshipping to the Houston Studio - https://...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>44</td><td>Chelsee Pettit</td><td class="evidence-excerpt">Hi Alejandra,
+
+Okay great, here is the UPS tracking for your reference - https:/...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>45</td><td>Ximena Jimenez</td><td class="evidence-excerpt">Hi there!
+
+
+This is just to let you know that the album has been shipped to the ...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>46</td><td>Murlande Bernard</td><td class="evidence-excerpt">Hi Murlande!
+
+
+I looked into your profile and can see the reason why your stainl...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>47</td><td>Get Outlook</td><td class="evidence-excerpt">Hi Joanne, 
+
+
+Happy Monday! I come with great news! ✨
+
+
+Our studio coordinator w...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>48</td><td>Kristie</td><td class="evidence-excerpt">Hello there!
+
+
+I hope you&#x27;re doing great!
+
+
+I&#x27;m excited to let you know that the...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>49</td><td>Angelica Rodriguez</td><td class="evidence-excerpt">Hi Tania,
+
+Thank you for following up. Here is the new tracking reshipping to th...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>50</td><td>Jamarri Smith</td><td class="evidence-excerpt">Hi Pauline,
+
+Sorry for the delay response, we were off for the holidays, we just...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>51</td><td>David Andrei Dominguez</td><td class="evidence-excerpt">Hi Tania,
+
+This album was left unclaimed and returned to us again. Would it be o...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>52</td><td>Latrice</td><td class="evidence-excerpt">Hi,
+
+I hope you’re having a wonderful day! 💖
+
+Ready for some exciting news? Your...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>53</td><td>Michelle</td><td class="evidence-excerpt">Hi Michelle,
+
+
+I hope you&#x27;re doing well!
+We have been provided with the followin...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>54</td><td>Shannon</td><td class="evidence-excerpt">Happy Holidays Fiona,
+I was finally able to make it by the post office and pick ...</td><td>RESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>55</td><td>Patricia</td><td class="evidence-excerpt">Hi Alejandra,
+
+Here is the new tracking for the reship to her mother&#x27;s address -...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>56</td><td>On Wed</td><td class="evidence-excerpt">Hi there!
+
+
+Great news! Updating you that your album has been sent to print!
+
+
+I...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>57</td><td>Deven Ferrell</td><td class="evidence-excerpt">Hi Pauline,
+
+Here is the new tracking for this reshipment to the Houston Studio ...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>58</td><td>Ann Ureste</td><td class="evidence-excerpt">Hi Pauline,
+
+Here is the new tracking for this reshipment - https://tools.usps.c...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>59</td><td>Chaketa</td><td class="evidence-excerpt">Hi Chaketa, 
+
+
+The Affirm dispute was ruled in our favour. 
+
+
+As stated previous...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>60</td><td>Temia</td><td class="evidence-excerpt">Hi Temia! 💖​
+
+
+I hope you&#x27;re having a lovely day!
+
+
+Your new tracking informatio...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>61</td><td>Lakecia</td><td class="evidence-excerpt">Hi Lakecia, 
+
+
+Merry Christmas &amp; Happy Holidays to you! ✨🎄 I hope you’re soaking...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-flagged"><td>62</td><td>Anet</td><td class="evidence-excerpt">Hi Anet!!
+
+
+I have just sent your 4 stainlesses to print, it will arrive to your...</td><td>RESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>63</td><td>Powell Annmarie</td><td class="evidence-excerpt">Hi there,
+
+
+Great news!
+
+Here is the tracking link for the re-shipment of your a...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>64</td><td>Vicky Vegg</td><td class="evidence-excerpt">Hi Victoria, 
+
+
+Fiona is out of the office for the holidays, but I&#x27;m happy to lo...</td><td>RESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>65</td><td>Gabriella</td><td class="evidence-excerpt">Hi Gabriella, 
+
+
+I hope you’re doing well as we step into the new year ✨
+
+
+I am ...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>66</td><td>Aura</td><td class="evidence-excerpt">Hi Aura!! 
+
+
+Thanks so much for confirming that with me, 
+
+
+I just updated our s...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>67</td><td>Jamie</td><td class="evidence-excerpt">Hi guys!
+
+
+Yes they have been shipped to you guys at:
+36 Young Street, Welland O...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>68</td><td>Shondelle</td><td class="evidence-excerpt">Hi Shondelle, 
+
+
+I have just sent your album to print, it will arrive at the add...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>69</td><td>Margaret</td><td class="evidence-excerpt">Hi,
+
+I hope you’re having a wonderful day! 💖
+
+Ready for some exciting news? Your...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>70</td><td>Mitha</td><td class="evidence-excerpt">Hi. 
+
+
+I did not receive Stainless V3. I did receive V2. Let me know if I am mis...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>71</td><td>Lachelle Pulido</td><td class="evidence-excerpt">Hi Sonia,
+
+Here is the new tracking for this reshipment - https://tools.usps.com...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>72</td><td>Shana Phillips</td><td class="evidence-excerpt">Perfect! I forwarded the tracking information to the client. Thank you:)</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>73</td><td>Elyse</td><td class="evidence-excerpt">Hi Elyse!! 
+
+
+That&#x27;s great to hear, I&#x27;m happy you got the album! 
+
+
+Here is the ...</td><td>RESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>74</td><td>Alissia Stewart</td><td class="evidence-excerpt">Hi Alejandra,
+
+Thanks for updated address. Here is the new Canada Post tracking ...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-low_confidence"><td>75</td><td>Tina Smith</td><td class="evidence-excerpt">Fair enough! Thank you for looking into this, Julie!
+
+
+Happy Thursday:)</td><td>NEEDS_FOLLOW_UP</td><td class="verdict-cell"><span class="verdict-icon verdict-lowconf">⚠️</span></td></tr>
+<tr class="verdict-row-flagged"><td>76</td><td>Marie</td><td class="evidence-excerpt">Bonjour,
+
+Je voulais juste vous aviser qu&#x27;il me manque 1 album !!!
+
+Celui de pho...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>77</td><td>Thresella</td><td class="evidence-excerpt">Hi Thresella!! 
+
+
+Here is the new tracking information for your item! 
+
+
+
+https:...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>78</td><td>Lexi Harmon</td><td class="evidence-excerpt">Hi Victoria,
+
+We finally received this album back to our lab. I have used the ne...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>79</td><td>Anna kay Mccalla</td><td class="evidence-excerpt">Hi ✨
+
+
+Thanks so much for reaching out.
+
+
+We haven&#x27;t shipped your album because ...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-low_confidence"><td>80</td><td>Linda Maddalena</td><td class="evidence-excerpt">Thank you so much for the info!
+
+
+On Thu, Jan 15, 2026 at 12:00 PM Lia R. - Nuov...</td><td>NEEDS_FOLLOW_UP</td><td class="verdict-cell"><span class="verdict-icon verdict-lowconf">⚠️</span></td></tr>
+<tr class="verdict-row-verified"><td>81</td><td>Lashonda P</td><td class="evidence-excerpt">Hi there,
+
+
+Thanks again for following up and re-confirming the address. Here is...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>82</td><td>Jewl Danley</td><td class="evidence-excerpt">Hi Jewl, 
+
+
+I am delighted to let you know that it has finally made it back to o...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>83</td><td>Tammy K</td><td class="evidence-excerpt">Hi Chance,
+
+Thanks for checking with the client and reconfirming their address. ...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>84</td><td>Kyla O</td><td class="evidence-excerpt">Hi Chance,
+
+Here is the new tracking for this reshipment - https://tools.usps.co...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>85</td><td>Humberta E</td><td class="evidence-excerpt">Hi Chance,
+
+Thanks for reconfirming their shipping address. Here is the new trac...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>86</td><td>Rachel</td><td class="evidence-excerpt">Hello, I’m still waiting to hear back about my album.
+Thank you
+Rachel Harris
+
+O...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-low_confidence"><td>87</td><td>Labria</td><td class="evidence-excerpt">Hello Pauline,
+
+
+
+
+Thank you for your message.
+
+
+
+
+I want to be clear that I hav...</td><td>NEEDS_FOLLOW_UP</td><td class="verdict-cell"><span class="verdict-icon verdict-lowconf">⚠️</span></td></tr>
+<tr class="verdict-row-verified"><td>88</td><td>Arianna Page</td><td class="evidence-excerpt">Hi Arianna!
+
+
+Here is your updated tracking link: https://tools.usps.com/go/Trac...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>89</td><td>Owen</td><td class="evidence-excerpt">Hi Maria,
+
+
+I hope you&#x27;re doing great!
+
+
+Thank you so much for confirming the zi...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>90</td><td>Lakeisha</td><td class="evidence-excerpt">Hi Lakiesha, 
+
+
+I’m so happy to hear that , and I completely understand the anti...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>91</td><td>Imani Moore</td><td class="evidence-excerpt">Hi Imani,
+
+
+I want to sincerely apologize for the delay in providing your tracki...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>92</td><td>Mylasia</td><td class="evidence-excerpt">You guys may have to start a claim with UPS because I have not received my portr...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>93</td><td>Jackie</td><td class="evidence-excerpt">Hello hello! 
+
+Since we already have your address, I’m sending your photo to pri...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>94</td><td>Arleshia</td><td class="evidence-excerpt">Hi Arleshia!
+
+
+Thanks for reaching out! It looks like your album was delivered t...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>95</td><td>Latasha</td><td class="evidence-excerpt">Do you know I only received two of my stainless steel I didn’t receive all
+three...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-low_confidence"><td>96</td><td>Alexis</td><td class="evidence-excerpt">Hi Alexis!
+
+
+No problem at all! I hope you adore your album for years to come 💖
+...</td><td>NEEDS_FOLLOW_UP</td><td class="verdict-cell"><span class="verdict-icon verdict-lowconf">⚠️</span></td></tr>
+<tr class="verdict-row-verified"><td>97</td><td>Carolyn A</td><td class="evidence-excerpt">Hi there,
+
+
+I hope all is well!
+
+
+I will link the re-shipment tracking link belo...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>98</td><td>Alexandra Sustaita</td><td class="evidence-excerpt">Hi there,
+
+
+I hope all is well!
+Here is the tracking link of your re-shipment:
+
+...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>99</td><td>Phey Byron</td><td class="evidence-excerpt">Hi Team,
+
+We&#x27;re emailing regarding this order as it was sent back to us due to h...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>100</td><td>Cierra Morgan</td><td class="evidence-excerpt">Hi,
+
+We&#x27;re just emailing to let you know that this album was returned to us due ...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>101</td><td>Katie McCormack</td><td class="evidence-excerpt">Hi Liz,
+
+Thank you for getting back to me with an updated address! Here is the n...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>102</td><td>Tai</td><td class="evidence-excerpt">Hi,
+Thanks for reaching out I never received any notice. I was expecting it to
+b...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>103</td><td>Viola</td><td class="evidence-excerpt">Hi Viola,
+
+
+I tried giving you a call earlier but wasn’t able to reach you. I le...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>104</td><td>Sherrie</td><td class="evidence-excerpt">Hi Sherrie! 
+
+
+I&#x27;m reaching out to you as your album is waiting to be picked up ...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>105</td><td>Mohamed Faxdi</td><td class="evidence-excerpt">Hi there! 
+
+
+I&#x27;m reaching out to you as your album is waiting to be picked up at...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>106</td><td>Janieka</td><td class="evidence-excerpt">Hi Nieka,
+
+
+I hope you’re having a wonderful day!
+
+
+Ready for some exciting news...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-flagged"><td>107</td><td>Triana Jones</td><td class="evidence-excerpt">Good Morning,
+
+
+I received my photo album but I haven’t received my stainless st...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-flagged"><td>108</td><td>Wendy Wright</td><td class="evidence-excerpt">Hi Wendy
+
+I hope you’re having a fantastic day! 🤍
+
+
+We’re really sorry for the d...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-flagged">❌</span></td></tr>
+<tr class="verdict-row-verified"><td>109</td><td>Leonor</td><td class="evidence-excerpt">Hi beautiful! I got it today. Thank you so much!
+Sincerely, Leonor</td><td>RESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>110</td><td>Theresa Ballard</td><td class="evidence-excerpt">Hi Sonia,
+
+Thanks for following up and re-confirming the shipping address.
+
+Here...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>111</td><td>Katryna Pulgarin</td><td class="evidence-excerpt">Hello,
+
+We&#x27;re just emailing to let you know that this album was returned to us d...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>112</td><td>Demetria George</td><td class="evidence-excerpt">Hi Romina,
+
+Thanks for following up!
+
+Here is the new tracking for this reshipme...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-low_confidence"><td>113</td><td>Lizette</td><td class="evidence-excerpt">Ok I wanted to make sure with the birthday package I had gotten from instagram I...</td><td>NEEDS_FOLLOW_UP</td><td class="verdict-cell"><span class="verdict-icon verdict-lowconf">⚠️</span></td></tr>
+<tr class="verdict-row-verified"><td>114</td><td>Gina</td><td class="evidence-excerpt">Hi Gigi,
+
+
+I hope you’re doing well! 🤍
+
+
+I’ve reviewed the shipment history for ...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>115</td><td>Sandra Rodriguez</td><td class="evidence-excerpt">Hi Sandra,
+
+
+I did some further investigating, and it’s unclear whether the albu...</td><td>LIKELY_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>116</td><td>Claudia</td><td class="evidence-excerpt">Thank you for the print I received but I’m still waiting for the album. Any upda...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+<tr class="verdict-row-verified"><td>117</td><td>Sharon</td><td class="evidence-excerpt">Hi Sharon,
+
+
+I have some important news regarding your album delivery!
+
+
+It look...</td><td>CONFIRMED_UNRESOLVED</td><td class="verdict-cell"><span class="verdict-icon verdict-verified">✅</span></td></tr>
+</tbody></table></div>
+    </section>
+
+    <!-- Deep Dive Sample -->
+    <section id="deep-dive">
+      <h2>Deep-Dive Verification Sample</h2>
+      <p class="section-desc">Randomly selected rows with expanded evidence analysis</p>
+      <p class="sample-info">14 rows randomly selected for expanded verification analysis.</p>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 12: Shayla Peneku</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 90.0%; background: #2ecc71;"></div><span class="confidence-label">90.0%</span></div></div><blockquote class="dd-evidence">Fantastic! I forwarded the tracking information to this client as well. 
+
+
+Thanks 🥰</blockquote><div class="dd-explanation">The text contains &#x27;tracking information&#x27;, &#x27;forwarded the tracking&#x27; which directly supports the LIKELY_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">tracking information</span> <span class="signal-match">forwarded the tracking</span></div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 18: Dennisse G</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 90.0%; background: #2ecc71;"></div><span class="confidence-label">90.0%</span></div></div><blockquote class="dd-evidence">Hi Dennisse,
+
+
+I apologize for just seeing your email now. I looked into your tracking number and I can see it was successfully picked up, I hope you</blockquote><div class="dd-explanation">The text contains &#x27;tracking number&#x27; which directly supports the LIKELY_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">tracking number</span></div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 21: Bethany</span><span class="verdict-icon verdict-flagged">❌</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 0.0%; background: #e74c3c;"></div><span class="confidence-label">0.0%</span></div></div><blockquote class="dd-evidence">Hi Bethany,
+
+
+Please don’t apologize at all — I’m so sorry to hear how hard this pregnancy has been on you. That sounds incredibly challenging, and I</blockquote><div class="dd-explanation">No signals were found in the text that support the LIKELY_UNRESOLVED classification.</div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 27: Mariana Philippou</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 90.0%; background: #2ecc71;"></div><span class="confidence-label">90.0%</span></div></div><blockquote class="dd-evidence">Hi Alejandra,
+
+Thanks for following up and providing an updated address!
+
+Here is the Canada Post tracking for this reshipment - *7302275921559866
+
+*L</blockquote><div class="dd-explanation">The text contains &#x27;reshipment&#x27;, &#x27;canada post&#x27;, &#x27;following up&#x27; which directly supports the LIKELY_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">reshipment</span> <span class="signal-match">canada post</span> <span class="signal-match">following up</span></div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 51: David Andrei Dominguez</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 90.0%; background: #2ecc71;"></div><span class="confidence-label">90.0%</span></div></div><blockquote class="dd-evidence">Hi Tania,
+
+This album was left unclaimed and returned to us again. Would it be okay for us to reship to the Toronto Studio for safe keeping?
+
+Kindly l</blockquote><div class="dd-explanation">The text contains &#x27;reship&#x27;, &#x27;album was&#x27;, &#x27;unclaimed&#x27;, &#x27;left unclaimed&#x27; which directly supports the LIKELY_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">reship</span> <span class="signal-match">album was</span> <span class="signal-match">unclaimed</span> <span class="signal-match">left unclaimed</span></div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 52: Latrice</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>CONFIRMED_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 100.0%; background: #2ecc71;"></div><span class="confidence-label">100.0%</span></div></div><blockquote class="dd-evidence">Hi,
+
+I hope you’re having a wonderful day! 💖
+
+Ready for some exciting news? Your stainless has officially been sent to print! 
+
+You can expect it to a</blockquote><div class="dd-explanation">The text contains &#x27;sent to print&#x27; which directly supports the CONFIRMED_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">sent to print</span></div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 63: Powell Annmarie</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 90.0%; background: #2ecc71;"></div><span class="confidence-label">90.0%</span></div></div><blockquote class="dd-evidence">Hi there,
+
+
+Great news!
+
+Here is the tracking link for the re-shipment of your album:
+https://tools.usps.com/go/TrackConfirmAction?tLabels=42075007564</blockquote><div class="dd-explanation">The text contains &#x27;re-shipment&#x27;, &#x27;tracking link&#x27;, &#x27;usps.com&#x27;, &#x27;trackconfirmaction&#x27;, &#x27;here is the tracking&#x27;, &#x27;your album&#x27; which directly supports the LIKELY_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">re-shipment</span> <span class="signal-match">tracking link</span> <span class="signal-match">usps.com</span> <span class="signal-match">trackconfirmaction</span> <span class="signal-match">here is the tracking</span> <span class="signal-match">your album</span></div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 64: Vicky Vegg</span><span class="verdict-icon verdict-flagged">❌</span></div><div class="dd-classification">Classification: <strong>RESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 0.0%; background: #e74c3c;"></div><span class="confidence-label">0.0%</span></div></div><blockquote class="dd-evidence">Hi Victoria, 
+
+
+Fiona is out of the office for the holidays, but I&#x27;m happy to look into this for you!
+
+
+As per the tracking information we have availa</blockquote><div class="dd-explanation">No signals were found in the text that support the RESOLVED classification.</div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 65: Gabriella</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 90.0%; background: #2ecc71;"></div><span class="confidence-label">90.0%</span></div></div><blockquote class="dd-evidence">Hi Gabriella, 
+
+
+I hope you’re doing well as we step into the new year ✨
+
+
+I am following up about your album! I am delighted to let you know that it</blockquote><div class="dd-explanation">The text contains &#x27;your album&#x27;, &#x27;following up&#x27; which directly supports the LIKELY_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">your album</span> <span class="signal-match">following up</span></div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 69: Margaret</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>CONFIRMED_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 100.0%; background: #2ecc71;"></div><span class="confidence-label">100.0%</span></div></div><blockquote class="dd-evidence">Hi,
+
+I hope you’re having a wonderful day! 💖
+
+Ready for some exciting news? Your album has officially been sent to print! 
+
+You can expect it to arriv</blockquote><div class="dd-explanation">The text contains &#x27;sent to print&#x27;, &#x27;your album&#x27; which directly supports the CONFIRMED_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">sent to print</span> <span class="signal-match">your album</span></div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 72: Shana Phillips</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 90.0%; background: #2ecc71;"></div><span class="confidence-label">90.0%</span></div></div><blockquote class="dd-evidence">Perfect! I forwarded the tracking information to the client. Thank you:)</blockquote><div class="dd-explanation">The text contains &#x27;tracking information&#x27;, &#x27;forwarded the tracking&#x27; which directly supports the LIKELY_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">tracking information</span> <span class="signal-match">forwarded the tracking</span></div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 75: Tina Smith</span><span class="verdict-icon verdict-lowconf">⚠️</span></div><div class="dd-classification">Classification: <strong>NEEDS_FOLLOW_UP</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 50.0%; background: #f39c12;"></div><span class="confidence-label">50.0%</span></div></div><blockquote class="dd-evidence">Fair enough! Thank you for looking into this, Julie!
+
+
+Happy Thursday:)</blockquote><div class="dd-explanation">No strong signals were detected for the NEEDS_FOLLOW_UP classification. Manual review is recommended.</div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 92: Mylasia</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>CONFIRMED_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 100.0%; background: #2ecc71;"></div><span class="confidence-label">100.0%</span></div></div><blockquote class="dd-evidence">You guys may have to start a claim with UPS because I have not received my portrait!
+
+Mylasia Beyah</blockquote><div class="dd-explanation">The text contains &#x27;have not received&#x27;, &#x27;not received&#x27; which directly supports the CONFIRMED_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">have not received</span> <span class="signal-match">not received</span></div></div>
+<div class="deep-dive-card"><div class="dd-header"><span class="dd-entity">Row 111: Katryna Pulgarin</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>CONFIRMED_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 100.0%; background: #2ecc71;"></div><span class="confidence-label">100.0%</span></div></div><blockquote class="dd-evidence">Hello,
+
+We&#x27;re just emailing to let you know that this album was returned to us due to being left unclaimed. Could you confirm with the client that the</blockquote><div class="dd-explanation">The text contains &#x27;unclaimed&#x27;, &#x27;left unclaimed&#x27;, &#x27;returned&#x27;, &#x27;returned to us&#x27;, &#x27;album was&#x27; which directly supports the CONFIRMED_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">unclaimed</span> <span class="signal-match">left unclaimed</span> <span class="signal-match">returned</span> <span class="signal-match">returned to us</span> <span class="signal-match">album was</span></div></div>
+    </section>
+
+    <!-- Spot Check -->
+    <section id="spot-check">
+      <h2>Known-Entity Spot-Check</h2>
+      <p class="section-desc">Targeted verification of entities the stakeholder personally recognizes</p>
+      <div class="spot-check-card"><div class="dd-header"><span class="dd-entity">Row 1: Laura Muras</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 90.0%; background: #2ecc71;"></div><span class="confidence-label">90.0%</span></div></div><blockquote class="dd-evidence">Hi Tania,
+
+Thanks for following up!
+
+Here is the new tracking for this reshipment to the Houston Studio - https://tools.usps.com/go/TrackConfirmAction</blockquote><div class="dd-explanation">The text contains &#x27;reshipment&#x27;, &#x27;new tracking&#x27;, &#x27;usps.com&#x27;, &#x27;trackconfirmaction&#x27;, &#x27;following up&#x27; which directly supports the LIKELY_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">reshipment</span> <span class="signal-match">new tracking</span> <span class="signal-match">usps.com</span> <span class="signal-match">trackconfirmaction</span> <span class="signal-match">following up</span></div></div>
+<div class="spot-check-card"><div class="dd-header"><span class="dd-entity">Row 3: Shyann W</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 90.0%; background: #2ecc71;"></div><span class="confidence-label">90.0%</span></div></div><blockquote class="dd-evidence">Hi Shyann!! 
+
+
+Here is the new tracking information for your package! 
+https://tools.usps.com/go/TrackConfirmAction?tLabels=42033027464092382903628943</blockquote><div class="dd-explanation">The text contains &#x27;new tracking&#x27;, &#x27;tracking information&#x27;, &#x27;usps.com&#x27;, &#x27;trackconfirmaction&#x27; which directly supports the LIKELY_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">new tracking</span> <span class="signal-match">tracking information</span> <span class="signal-match">usps.com</span> <span class="signal-match">trackconfirmaction</span></div></div>
+<div class="spot-check-card"><div class="dd-header"><span class="dd-entity">Row 4: Therese B</span><span class="verdict-icon verdict-verified">✅</span></div><div class="dd-classification">Classification: <strong>LIKELY_UNRESOLVED</strong></div><div class="dd-confidence"><span>Confidence:</span><div class="confidence-bar"><div class="confidence-fill" style="width: 90.0%; background: #2ecc71;"></div><span class="confidence-label">90.0%</span></div></div><blockquote class="dd-evidence">Hi Therese, 
+
+
+I hope you&#x27;re doing well!
+
+
+We have been provided with the following information about your delivery:
+
+
+Therese Bayaton - Need
+to be pi</blockquote><div class="dd-explanation">The text contains &#x27;your delivery&#x27;, &#x27;about your delivery&#x27; which directly supports the LIKELY_UNRESOLVED classification.</div><div class="signals-row"><strong>Matching Signals:</strong> <span class="signal-match">your delivery</span> <span class="signal-match">about your delivery</span></div></div>
+    </section>
+
+    <!-- Methodology -->
+    <section id="methodology">
+      <h2>Verification Methodology</h2>
+      <p class="section-desc">How the verification system works and what it checks</p>
+      <p><strong>Version:</strong> 1.0
+ <strong>Last Updated:</strong> 2026-02-26
+ <strong>Audience:</strong> Non-technical executives, stakeholders, auditors
+</p>
+<hr>
+<h3>Overview</h3>
+<p>A Proof Certificate is a structured document that accompanies any data-driven deliverable. Its purpose is to answer one question: <strong>How do we know the data is real?</strong>
+</p>
+<p>When we produce a report — whether it classifies customer service issues, measures delivery failure rates, or tracks operational trends — the Proof Certificate provides an auditable chain of evidence from every data point back to its original source. It is the difference between "trust us" and "here is the proof."
+</p>
+<p>This document explains the four pillars of our verification methodology: Source Verification, Classification Verification, Integrity Scoring, and the limitations of the system.
+</p>
+<hr>
+<h3>1. Source Verification</h3>
+<p>Source Verification answers the question: <strong>Does every data point trace back to a real, identifiable source?</strong>
+</p>
+<h4>How It Works</h4>
+<p>Every row in a certified dataset must satisfy two requirements:
+</p>
+<p><strong>Evidence Quote.</strong> Each row contains a direct text excerpt from the original source material. This is not a summary, not a paraphrase, and not a generated description. It is the actual text — copied verbatim — from the conversation, email, ticket, or record that the data point was extracted from. If a row claims a customer reported a damaged product, the evidence quote shows the customer's own words describing that damage.
+</p>
+<p><strong>Source System ID.</strong> Each row includes a unique identifier that can be looked up in the original system. For example, a Front conversation ID (e.g., <code>cnv_abc123</code>) allows anyone with access to Front to navigate directly to the original conversation and verify the data independently. This is not a row number we assigned. It is the identifier from the system of record.
+</p>
+<h4>Why This Matters</h4>
+<p>These two requirements create a verifiable chain of custody. A skeptical reader can take any row in the dataset, read the evidence quote to understand what was observed, and then use the source system ID to locate the original record and confirm it. No row exists in isolation. Every data point is anchored to something real.
+</p>
+<h4>Data Hash</h4>
+<p>Each Proof Certificate includes a SHA-256 hash of the certified dataset. This hash is a cryptographic fingerprint: if even a single character in the dataset changes after certification, the hash will no longer match. This guarantees that the dataset you are reviewing is identical to the one that was verified. No rows have been added, removed, or modified after the fact.
+</p>
+<hr>
+<h3>2. Classification Verification</h3>
+<p>Classification Verification answers the question: <strong>Did the system interpret the data correctly?</strong>
+</p>
+<p>Many deliverables involve classification — assigning a category or label to each record. For example, a customer service message might be classified as "Damaged Product," "Wrong Item Shipped," or "Delivery Delay." Classification Verification confirms that these labels are supported by the evidence.
+</p>
+<h4>How It Works</h4>
+<p><strong>Signal Detection.</strong> For each classification category, we define a set of expected signals — specific words, phrases, or patterns that should appear in records assigned to that category. For example, a record classified as "Damaged Product" should contain signals such as "broken," "cracked," "damaged," "shattered," "dented," or descriptions of physical harm to the item. These signal lists are defined in advance, not generated on the fly.
+</p>
+<p><strong>Conflict Detection.</strong> We also define conflicting signals — words or patterns that would contradict a given classification. For instance, a record classified as "Damaged Product" that contains the phrase "never received" suggests a delivery failure, not product damage. The presence of conflicting signals raises a flag.
+</p>
+<p><strong>Automated Comparison.</strong> Every row in the dataset is automatically checked against both its expected and conflicting signal lists. This produces one of three verdicts:
+</p>
+<ul>
+<li><strong>VERIFIED</strong> — The evidence contains expected signals for the assigned classification and no conflicting signals. The label is well-supported.</li>
+<li><strong>LOW_CONFIDENCE</strong> — The evidence does not contain strong expected signals, but no conflicting signals are present either. The label may be correct, but the evidence is ambiguous.</li>
+<li><strong>FLAGGED</strong> — The evidence contains signals that conflict with the assigned classification. This row requires human review.</li>
+</ul>
+<p><strong>Plain English Explanations.</strong> Every verdict is accompanied by a human-readable explanation. Rather than presenting raw signal lists, the certificate explains in plain language why a row was verified, why confidence is low, or what conflict was detected. For example: "This row is classified as 'Wrong Item Shipped' and the evidence contains the phrase 'received a completely different product,' which supports this classification."
+</p>
+<hr>
+<h3>3. Integrity Scoring</h3>
+<p>Integrity Scoring answers the question: <strong>How trustworthy is the dataset as a whole?</strong>
+</p>
+<p>Individual row-level verdicts are useful, but stakeholders also need a single summary measure. The Integrity Score combines three components into a letter grade from A+ through F.
+</p>
+<h4>The Three Components</h4>
+<p><strong>Source Evidence Rate.</strong> The percentage of rows in the dataset that have both an evidence quote and a source system ID. A dataset where 95% of rows have complete source evidence scores 95% on this component. Missing evidence means a data point cannot be independently verified.
+</p>
+<p><strong>Classification Match Rate.</strong> The percentage of classified rows that received a VERIFIED verdict during signal detection. A high match rate means the assigned labels are well-supported by the evidence. This component only applies to datasets that include classifications.
+</p>
+<p><strong>Flag Rate.</strong> The percentage of rows that received a FLAGGED verdict — meaning conflicting signals were detected. Unlike the other two components, a lower flag rate is better. A high flag rate indicates systematic misclassification or data quality problems.
+</p>
+<h4>How the Grade Is Calculated</h4>
+<p>The three components are combined using a weighted average:
+</p>
+<ul>
+<li>Source Evidence Rate contributes 30% of the final score</li>
+<li>Classification Match Rate contributes 50% of the final score</li>
+<li>Flag Rate (inverted, so lower is better) contributes 20% of the final score</li>
+</ul>
+<p>The resulting percentage maps to a letter grade. The full grading rubric is documented separately in the Confidence Grading reference.
+</p>
+<hr>
+    </section>
+
+    <!-- Limitations -->
+    <section id="limitations">
+      <h2>Limitations</h2>
+      <p class="section-desc">What this verification system can and cannot confirm</p>
+      <h3>4. Limitations</h3>
+<p>No verification system is perfect. The Proof Certificate is explicit about what it can and cannot verify.
+</p>
+<h4>What This System Cannot Do</h4>
+<p><strong>It cannot verify real-world outcomes.</strong> The certificate verifies that data was extracted correctly from source records and classified accurately. It does not verify what happened in the physical world. If a record says a replacement was shipped, the certificate confirms the record says that. It does not confirm the replacement arrived.
+</p>
+<p><strong>It cannot access external systems.</strong> Verification is limited to the data and source systems we have access to. If a record references a USPS tracking number, the certificate does not query USPS to confirm delivery status. If a record references an action taken in a system we cannot access, we can only verify what the record states, not the outcome.
+</p>
+<p><strong>Keyword detection is not natural language understanding.</strong> Signal detection works by identifying specific words and phrases. It does not understand context, sarcasm, negation patterns, or implied meaning the way a human reader does. A message that says "I wouldn't say it was damaged" contains the word "damaged" and might trigger a signal match even though the customer is saying the opposite. These edge cases are rare but real, which is why the system produces LOW_CONFIDENCE and FLAGGED verdicts rather than silently accepting everything.
+</p>
+<p><strong>Low confidence does not mean wrong.</strong> A LOW_CONFIDENCE verdict means the automated system could not find strong signal evidence to confirm the classification. It does not mean the classification is incorrect. Some records are accurately classified by a human analyst who understood nuance that keyword detection cannot capture. Low confidence is an invitation to review, not an accusation of error.
+</p>
+<hr>
+<h3>5. Anti-Hallucination Guarantees</h3>
+<p>The Proof Certificate system is designed from the ground up to prevent fabricated data — what the AI industry calls "hallucination."
+</p>
+<h4>Every Data Point Is Extracted, Never Generated</h4>
+<p>Evidence quotes in the certificate are copied directly from source text. The system does not summarize, rephrase, or generate descriptions of what a source record "probably" says. If the exact text cannot be extracted, the evidence field is left empty and the row is marked accordingly. An empty evidence field is honest. A fabricated one is not.
+</p>
+<h4>Classifications Are Derived from Signals, Not Interpretation</h4>
+<p>When the system verifies a classification, it checks for the presence or absence of predefined signals. It does not ask "does this feel like a damaged product complaint?" It asks "does the text contain any of these 47 specific words and phrases associated with product damage?" This mechanical approach is less flexible than human judgment but far less susceptible to fabrication.
+</p>
+<h4>The Certificate Shows Raw Evidence for Independent Verification</h4>
+<p>The Proof Certificate is not a summary document that asks you to trust its conclusions. It shows the actual evidence — the quotes, the source IDs, the signals detected, and the verdicts — so that any reader can evaluate the conclusions independently. The certificate is a transparency tool, not a trust-me tool.
+</p>
+<h4>Data Hash Proves No Post-Hoc Modification</h4>
+<p>The SHA-256 hash included in every certificate is computed at the moment of certification. If the dataset is modified afterward — even by a single character — the hash will not match. This prevents a scenario where data is certified, then quietly edited before delivery. The hash is the seal. If the seal is broken, the certificate is void.
+</p>
+<hr>
+<h3>Summary</h3>
+<p>The Proof Certificate methodology rests on a simple principle: <strong>show your work.</strong> Every data point traces to a source. Every classification is checked against evidence. Every dataset receives an integrity grade. And every limitation is stated plainly. The result is a deliverable that does not require trust — it provides proof.
+</p>
+    </section>
+
+    <!-- Certificate Footer -->
+    <footer>
+      <div class="cert-footer">
+        <p>Data Hash: <code>8ec2966f42d24d25</code></p>
+        <p>Source: Nuovo Delivery Client Analysis &#124; Rows: 117 &#124; Generated: 2026-02-27 02:32 UTC</p>
+        <p class="cortex-footer">CORTEX v4.0 &#124; Proof Certificate System v0.1.0</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Theme Toggle Script -->
+  <script>
+    (function() {
+      var toggle = document.getElementById('themeToggle');
+      var icon = document.getElementById('themeIcon');
+      var html = document.documentElement;
+      var SUN = '\u2600';
+      var MOON = '\u263E';
+
+      function getStoredTheme() {
+        try {
+          return localStorage.getItem('proof-cert-theme');
+        } catch(e) {
+          return null;
+        }
+      }
+
+      function setStoredTheme(theme) {
+        try {
+          localStorage.setItem('proof-cert-theme', theme);
+        } catch(e) {
+          // localStorage unavailable
+        }
+      }
+
+      function applyTheme(theme) {
+        html.setAttribute('data-theme', theme);
+        icon.textContent = theme === 'dark' ? MOON : SUN;
+      }
+
+      // Initialize from localStorage or default to dark
+      var stored = getStoredTheme();
+      if (stored === 'light' || stored === 'dark') {
+        applyTheme(stored);
+      } else {
+        applyTheme('dark');
+      }
+
+      toggle.addEventListener('click', function() {
+        var current = html.getAttribute('data-theme');
+        var next = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        setStoredTheme(next);
+      });
+    })();
+  </script>
+</body>
+</html>
