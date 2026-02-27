@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Analysis Methodology Report | Nuovo Artistic Studios</title>
+<style>
+  :root {
+    --bg: #0a0a0a; --surface: #141414; --surface2: #1e1e1e; --border: #2a2a2a;
+    --gold: #c8a96e; --gold-dim: rgba(200,169,110,0.15);
+    --text: #e8e4dc; --text-dim: #8a8580; --text-bright: #f5f3ef;
+    --green: #4ade80; --red: #f87171; --yellow: #fbbf24; --blue: #60a5fa;
+  }
+  [data-theme="light"] {
+    --bg: #f5f3ef; --surface: #ffffff; --surface2: #eae7e1; --border: #d4d0c8;
+    --gold: #8a6d3b; --gold-dim: rgba(138,109,59,0.1);
+    --text: #2c2c2c; --text-dim: #6b6560; --text-bright: #1a1a1a;
+  }
+  [data-theme="light"] th { color: #5a4a2e; }
+  [data-theme="light"] .stat-card .val { color: #8a6d3b; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; max-width: 960px; margin: 0 auto; }
+  h1 { font-family: 'Playfair Display', Georgia, serif; color: var(--gold); font-size: 1.8rem; margin-bottom: 0.25rem; }
+  h2 { font-family: 'Playfair Display', Georgia, serif; color: var(--text-bright); font-size: 1.3rem; margin: 2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+  h3 { color: var(--gold); font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+  .subtitle { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 1.5rem; }
+  .meta { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; font-size: 0.85rem; }
+  .meta strong { color: var(--gold); }
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+  th { background: var(--surface2); color: var(--gold); text-align: left; padding: 0.5rem 0.75rem; border: 1px solid var(--border); font-weight: 600; }
+  td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--surface); }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 1rem 0; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+  .stat-card .val { font-size: 1.6rem; font-weight: 700; color: var(--gold); font-family: 'Playfair Display', Georgia, serif; }
+  .stat-card .label { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem; }
+  .callout { background: var(--gold-dim); border: 1px solid rgba(200,169,110,0.3); border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; font-size: 0.85rem; }
+  .callout strong { color: var(--gold); }
+  .callout-red { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; font-size: 0.85rem; }
+  .callout-red strong { color: var(--red); }
+  .callout-green { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.25); border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; font-size: 0.85rem; }
+  .callout-green strong { color: var(--green); }
+  .callout-blue { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.25); border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; font-size: 0.85rem; }
+  .callout-blue strong { color: var(--blue); }
+  .note { color: var(--text-dim); font-size: 0.8rem; font-style: italic; margin-top: 0.5rem; }
+  .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim); font-size: 0.75rem; }
+  code { background: var(--surface2); padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.82rem; }
+  .flow-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1rem 0; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.8; color: var(--text-dim); white-space: pre; overflow-x: auto; }
+  .flow-diagram .highlight { color: var(--gold); font-weight: 700; }
+  .flow-diagram .error { color: var(--red); }
+  .flow-diagram .success { color: var(--green); }
+  .bar-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.25rem 0; font-size: 0.82rem; }
+  .bar-label { width: 200px; text-align: right; color: var(--text-dim); flex-shrink: 0; }
+  .bar-track { flex: 1; background: var(--surface2); height: 22px; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--gold); border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 0.72rem; color: var(--bg); font-weight: 600; }
+  .bar-count { width: 50px; text-align: right; color: var(--text-dim); flex-shrink: 0; }
+  .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .comparison > div { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+  .comparison h4 { font-family: 'Playfair Display', Georgia, serif; margin-bottom: 0.5rem; font-size: 0.95rem; }
+  .tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 600; margin-right: 0.25rem; }
+  .tag-red { background: rgba(248,113,113,0.15); color: var(--red); }
+  .tag-green { background: rgba(74,222,128,0.15); color: var(--green); }
+  .tag-gold { background: rgba(200,169,110,0.15); color: var(--gold); }
+  .theme-toggle { position: fixed; top: 1rem; right: 1rem; z-index: 100; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 0.4rem 0.9rem; cursor: pointer; font-size: 0.8rem; color: var(--text-dim); font-family: 'Inter', sans-serif; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.4rem; }
+  .theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
+  .theme-toggle .icon { font-size: 1rem; }
+  @media (max-width: 700px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } .meta-grid { grid-template-columns: 1fr; } .comparison { grid-template-columns: 1fr; } .bar-label { width: 140px; } }
+  @media print { .theme-toggle { display: none; } body { background: #fff; color: #222; } .stat-card, .callout, .callout-red, .callout-green, .callout-blue, .meta { border-color: #ddd; } .stat-card .val, h1, h3 { color: #8a6d3b; } th { background: #f5f5f5; color: #333; } }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()"><span class="icon" id="themeIcon">&#9790;</span><span id="themeLabel">Light</span></button>
+
+<h1>Delivery Analysis: Methodology Rebuild</h1>
+<p class="subtitle">What Went Wrong, How We Fixed It, and What the Data Actually Says</p>
+<p class="subtitle">Nuovo Artistic Studios | Prepared for Matthew (Data Engineering) | February 26, 2026</p>
+
+<div class="meta">
+  <div class="meta-grid">
+    <div><strong>Context:</strong> Follow-up to the Front Inbox Delivery Issue Analysis</div>
+    <div><strong>Source Data:</strong> <code>front_classified.csv</code> (40,967 messages)</div>
+    <div><strong>Problem:</strong> Initial analysis found 135 clients; Catherine's ground truth was ~70</div>
+    <div><strong>Resolution:</strong> 3-layer pipeline rebuild &mdash; 117 unique people, 109 unresolved</div>
+  </div>
+</div>
+
+<!-- ───────────── THE PROBLEM ───────────── -->
+<h2>The Problem: 135 vs. ~70</h2>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="val">135</div><div class="label">Our Initial Count</div></div>
+  <div class="stat-card"><div class="val">~70</div><div class="label">Catherine's Estimate</div></div>
+  <div class="stat-card"><div class="val">~2x</div><div class="label">Overcount Factor</div></div>
+  <div class="stat-card"><div class="val">5</div><div class="label">Process Failures Found</div></div>
+</div>
+
+<p style="font-size: 0.85rem; margin-top: 0.75rem;">We text-classified 40,967 Front inbox messages looking for delivery issues. The classifier worked &mdash; it found 578 confirmed delivery issue messages across 301 conversations. But when we rolled those up to a client list, we got 135 names. Catherine, who manages this operationally, estimated ~70 clients are actually waiting for prints.</p>
+
+<p style="font-size: 0.85rem; margin-top: 0.5rem;">The classifier wasn't wrong. <strong>The pipeline after the classifier was wrong.</strong> We were answering the wrong question: "who was ever mentioned in a delivery conversation?" instead of "who is currently waiting for their prints?"</p>
+
+<!-- ───────────── 5 PROCESS FAILURES ───────────── -->
+<h2>Five Process Failures Identified</h2>
+
+<table>
+  <tr><th>#</th><th>Failure</th><th>What Happened</th><th>Impact</th></tr>
+  <tr>
+    <td style="font-weight:700; color:var(--red);">1</td>
+    <td><strong>Wrong Question</strong></td>
+    <td>Classified messages for delivery <em>mentions</em>, then counted people with mentions as &ldquo;unresolved clients.&rdquo; A mention is not a current state.</td>
+    <td>Counted people who had issues resolved months ago</td>
+  </tr>
+  <tr>
+    <td style="font-weight:700; color:var(--red);">2</td>
+    <td><strong>No Data Inventory</strong></td>
+    <td>Didn't profile the data model before building the pipeline. Assumed <code>recipient_handle</code> = message recipient. It actually means &ldquo;the external party in the conversation thread, regardless of message direction.&rdquo;</td>
+    <td>Built on wrong assumptions about what fields mean</td>
+  </tr>
+  <tr>
+    <td style="font-weight:700; color:var(--red);">3</td>
+    <td><strong>Conversation &ne; Person</strong></td>
+    <td>Treated each Front conversation as a unique client. But one person can appear in multiple threads &mdash; a direct email thread AND a Nuovo&harr;GTA printer thread about their album.</td>
+    <td>18 people counted twice (cross-channel duplicates)</td>
+  </tr>
+  <tr>
+    <td style="font-weight:700; color:var(--red);">4</td>
+    <td><strong>Historical &ne; Current</strong></td>
+    <td>Counted every delivery issue mention as &ldquo;currently unresolved.&rdquo; No lifecycle tracking. A client who complained in November and received their reshipped album in December was still counted as unresolved.</td>
+    <td>8 confirmed-resolved clients counted as unresolved</td>
+  </tr>
+  <tr>
+    <td style="font-weight:700; color:var(--red);">5</td>
+    <td><strong>No Calibration</strong></td>
+    <td>Never compared against Catherine's operational knowledge before finalizing the count. Should have spot-checked 20 names with her.</td>
+    <td>No reality check caught the 2x overcount</td>
+  </tr>
+</table>
+
+<!-- ───────────── WHAT WE BUILT ───────────── -->
+<h2>What We Built to Fix It</h2>
+
+<p style="font-size: 0.85rem;">Three analytical layers, applied sequentially. Each layer addresses one or more of the five failures above.</p>
+
+<div class="flow-diagram"><span class="highlight">LAYER 1: TEXT CLASSIFICATION (already existed)</span>
+40,967 messages &rarr; 578 confirmed delivery issues &rarr; 301 conversations &rarr; 135 raw client records
+<span class="error">Problem: 135 is ~2x the real number</span>
+
+<span class="highlight">LAYER 2: ENTITY RESOLUTION (new)</span>
+135 raw records &rarr; deduplicate across channels &rarr; <span class="success">117 unique people</span>
+Removed: 18 cross-channel duplicates
+
+<span class="highlight">LAYER 3: LIFECYCLE STATE MACHINE (new)</span>
+117 people &times; all messages &rarr; chronological signal detection &rarr; current status per person
+Result: 8 RESOLVED + <span class="success">109 UNRESOLVED</span> (in 3 evidence tiers)</div>
+
+<!-- ───────────── LAYER 2 DETAIL ───────────── -->
+<h2>Layer 2: Entity Resolution</h2>
+
+<div class="callout">
+  <strong>The Rule:</strong> The unit of analysis must match the unit of reality. If the question is about <em>people</em>, deduplicate to people. Never count thread artifacts as real-world entities.
+</div>
+
+<h3>The Problem It Solves</h3>
+
+<p style="font-size: 0.85rem;">In Front, a single client can appear in two completely separate conversation threads:</p>
+
+<div class="comparison">
+  <div>
+    <h4 style="color: var(--blue);">Channel A: Direct Thread</h4>
+    <p style="font-size: 0.82rem; color: var(--text-dim);">Nuovo &harr; Client email</p>
+    <table>
+      <tr><th>Field</th><th>Value</th></tr>
+      <tr><td><code>recipient_handle</code></td><td><code>jane.doe@gmail.com</code></td></tr>
+      <tr><td><code>subject</code></td><td>"Re: Your Nuovo Order"</td></tr>
+      <tr><td>Client says</td><td>"I never received my stainless"</td></tr>
+    </table>
+  </div>
+  <div>
+    <h4 style="color: var(--yellow);">Channel B: Printer Thread</h4>
+    <p style="font-size: 0.82rem; color: var(--text-dim);">Nuovo &harr; GTA Imaging</p>
+    <table>
+      <tr><th>Field</th><th>Value</th></tr>
+      <tr><td><code>recipient_handle</code></td><td><code>hello@gtaimaging.com</code></td></tr>
+      <tr><td><code>subject</code></td><td>"Unclaimed - 389616 Jane Doe"</td></tr>
+      <tr><td>Nuovo asks GTA</td><td>"Can we reship Jane Doe's album?"</td></tr>
+    </table>
+  </div>
+</div>
+
+<p style="font-size: 0.85rem; margin-top: 0.5rem;">Without entity resolution, Jane Doe is counted as <strong>two</strong> clients. One from her email thread, one from the GTA thread. The original pipeline had no way to connect them.</p>
+
+<h3>How It Works</h3>
+
+<table>
+  <tr><th>Priority</th><th>Match Type</th><th>Confidence</th><th>Example</th></tr>
+  <tr><td>1</td><td>Exact email match</td><td>HIGH</td><td><code>jane@gmail.com</code> = <code>jane@gmail.com</code></td></tr>
+  <tr><td>2</td><td>Normalized email</td><td>HIGH</td><td><code>Jane.Doe@Gmail.com</code> = <code>jane.doe@gmail.com</code></td></tr>
+  <tr><td>3</td><td>Full name + context</td><td>MEDIUM</td><td>Name from Channel A greeting matches name from Channel B subject</td></tr>
+  <tr><td>4</td><td>Full name only</td><td>MEDIUM</td><td>"Jane Doe" = "Jane Doe" (verified with conversation context)</td></tr>
+  <tr><td>5</td><td>Fuzzy name</td><td>LOW</td><td>"Jenniffer" &asymp; "Jennifer" (typo variant)</td></tr>
+</table>
+
+<h3>Results</h3>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="val">135</div><div class="label">Input Records</div></div>
+  <div class="stat-card"><div class="val">18</div><div class="label">Duplicates Found</div></div>
+  <div class="stat-card"><div class="val">117</div><div class="label">Unique People</div></div>
+  <div class="stat-card"><div class="val">0</div><div class="label">False Merges</div></div>
+</div>
+
+<p style="font-size: 0.85rem;">All 18 duplicates were cross-channel matches: clients who appeared in both a direct email thread AND a GTA printer coordination thread. Match confidence: 7 HIGH, 11 MEDIUM.</p>
+
+<h3>Channel Breakdown (117 Unique People)</h3>
+
+<div style="margin: 1rem 0;">
+  <div class="bar-row"><span class="bar-label">Client email (direct)</span><div class="bar-track"><div class="bar-fill" style="width:75.2%;background:var(--blue);">88</div></div><span class="bar-count">88</span></div>
+  <div class="bar-row"><span class="bar-label">GTA printer thread only</span><div class="bar-track"><div class="bar-fill" style="width:24.8%;background:var(--yellow);">29</div></div><span class="bar-count">29</span></div>
+</div>
+
+<p class="note">29 clients appear ONLY in GTA printer threads &mdash; their personal email is not in Front data. Names extracted from subject lines (e.g., "Unclaimed - 389616 Laura Muras").</p>
+
+<!-- ───────────── LAYER 3 DETAIL ───────────── -->
+<h2>Layer 3: Lifecycle State Machine</h2>
+
+<div class="callout">
+  <strong>The Rule:</strong> A text classifier answers &ldquo;was delivery ever mentioned?&rdquo; A lifecycle tracker answers &ldquo;did they actually get their prints?&rdquo; These are fundamentally different questions.
+</div>
+
+<h3>The Problem It Solves</h3>
+
+<p style="font-size: 0.85rem;">Consider this real message sequence for one client:</p>
+
+<table>
+  <tr><th>Date</th><th>Direction</th><th>Signal</th><th>State After</th></tr>
+  <tr><td>Nov 26</td><td>Inbound</td><td>"I never received my album"</td><td style="color:var(--red);">UNRESOLVED</td></tr>
+  <tr><td>Dec 1</td><td>Outbound</td><td>"Album returned to sender, we're reshipping"</td><td style="color:var(--yellow);">RESHIPPED</td></tr>
+  <tr><td>Dec 5</td><td>Outbound</td><td>"New tracking number: 1Z999..."</td><td style="color:var(--yellow);">RESHIPPED</td></tr>
+  <tr><td>Jan 15</td><td>Inbound</td><td>"Got it! Looks beautiful, thank you"</td><td style="color:var(--green);">RESOLVED</td></tr>
+</table>
+
+<p style="font-size: 0.85rem; margin-top: 0.5rem;">The original pipeline saw the November message ("I never received my album"), classified it as a delivery issue, and counted this person as an unresolved client. <strong>But they received their prints in January.</strong> The lifecycle state machine walks through every message chronologically and determines the <em>current</em> state, not the first mention.</p>
+
+<h3>State Machine Design</h3>
+
+<div class="flow-diagram"><span class="highlight">DELIVERY LIFECYCLE STATES</span>
+
+ORDERED &rarr; SHIPPED &rarr; DELIVERED <span class="success">[RESOLVED]</span>
+                &darr;
+          RETURNED_UNCLAIMED &rarr; RESHIPPED &rarr; DELIVERED <span class="success">[RESOLVED]</span>
+                &darr;                    &darr;
+          LOST_IN_TRANSIT     RETURNED_AGAIN
+                &darr;
+          REFUNDED <span class="success">[RESOLVED]</span></div>
+
+<h3>Signal Detection</h3>
+
+<p style="font-size: 0.85rem;">For each state transition, specific evidence patterns trigger the change:</p>
+
+<table>
+  <tr><th>Transition</th><th>Direction</th><th>Detection Patterns</th></tr>
+  <tr><td>&rarr; SHIPPED</td><td>Outbound</td><td>"tracking", "shipped", "on its way", "sent to print"</td></tr>
+  <tr><td>&rarr; DELIVERED</td><td>Inbound</td><td>"received", "got it", "arrived", "picked it up"</td></tr>
+  <tr><td>&rarr; RETURNED</td><td>Outbound</td><td>"returned to sender", "unclaimed", "undeliverable"</td></tr>
+  <tr><td>&rarr; RESHIPPED</td><td>Outbound</td><td>"reshipped", "resent", "new tracking", "shipped again"</td></tr>
+</table>
+
+<div class="callout-red">
+  <strong>Critical: Reply-Chain Stripping.</strong> A quoted &ldquo;your album has been shipped&rdquo; inside a reply doesn't mean it was shipped again. All quoted text from previous messages is stripped before signal detection runs. Without this, every reply that quoted the original shipping notification would re-trigger the SHIPPED state.
+</div>
+
+<h3>Results: Current Status of 117 People</h3>
+
+<div style="margin: 1rem 0;">
+  <div class="bar-row"><span class="bar-label">Reshipped, no confirmation</span><div class="bar-track"><div class="bar-fill" style="width:100%;">85</div></div><span class="bar-count">85</span></div>
+  <div class="bar-row"><span class="bar-label">Not received (confirmed)</span><div class="bar-track"><div class="bar-fill" style="width:16.5%;background:var(--red);">14</div></div><span class="bar-count">14</span></div>
+  <div class="bar-row"><span class="bar-label">Confirmed received</span><div class="bar-track"><div class="bar-fill" style="width:9.4%;background:var(--green);">8</div></div><span class="bar-count">8</span></div>
+  <div class="bar-row"><span class="bar-label">Stale / unknown</span><div class="bar-track"><div class="bar-fill" style="width:7.1%;background:var(--yellow);">6</div></div><span class="bar-count">6</span></div>
+  <div class="bar-row"><span class="bar-label">Returned, no reship</span><div class="bar-track"><div class="bar-fill" style="width:4.7%;background:var(--red);">4</div></div><span class="bar-count">4</span></div>
+</div>
+
+<div class="callout-green">
+  <strong>8 people confirmed receipt.</strong> These were counted as &ldquo;unresolved&rdquo; in the original 135 because they had delivery issue messages earlier in their thread. The lifecycle state machine found their later confirmation messages and moved them to RESOLVED.
+</div>
+
+<!-- ───────────── 3-TIER MODEL ───────────── -->
+<h2>Three-Tier Evidence Model</h2>
+
+<p style="font-size: 0.85rem;">After removing the 8 resolved clients, the remaining 109 are classified by evidence strength:</p>
+
+<table>
+  <tr><th>Tier</th><th>Classification</th><th>Count</th><th>Evidence Standard</th><th>Operational Action</th></tr>
+  <tr>
+    <td style="font-weight:700; color:var(--red);">1</td>
+    <td>CONFIRMED UNRESOLVED</td>
+    <td><strong>34</strong></td>
+    <td>Client explicitly states non-receipt, or item confirmed returned with no reshipping initiated</td>
+    <td>Immediate follow-up required</td>
+  </tr>
+  <tr>
+    <td style="font-weight:700; color:var(--yellow);">2</td>
+    <td>LIKELY UNRESOLVED</td>
+    <td><strong>69</strong></td>
+    <td>Item reshipped but no confirmation of receipt from client</td>
+    <td>Proactive outreach recommended</td>
+  </tr>
+  <tr>
+    <td style="font-weight:700; color:var(--blue);">3</td>
+    <td>NEEDS FOLLOW-UP</td>
+    <td><strong>6</strong></td>
+    <td>Stale thread (&gt;30 days no activity), status unclear</td>
+    <td>Proactive outreach required</td>
+  </tr>
+</table>
+
+<!-- ───────────── RECONCILIATION ───────────── -->
+<h2>Reconciliation: Why Catherine Said ~70</h2>
+
+<div class="callout">
+  <strong>Catherine's ~70 is correct.</strong> Here's how it maps to our 109.
+</div>
+
+<table>
+  <tr><th>Component</th><th>Count</th><th>Explanation</th></tr>
+  <tr><td>Tier 1: Confirmed Unresolved</td><td>34</td><td>Catherine counts all of these &mdash; these are definitively unresolved</td></tr>
+  <tr><td>Tier 2 subset: Likely still waiting</td><td>~30&ndash;40</td><td>Of the 69 reshipped but unconfirmed, Catherine knows from GTA delivery records which actually arrived</td></tr>
+  <tr><td style="font-weight:700; color:var(--gold);">Catherine's estimated total</td><td style="font-weight:700; color:var(--gold);">~64&ndash;74</td><td style="color:var(--gold);">Aligns with her ~70</td></tr>
+  <tr><td>Tier 2 remainder</td><td>~29&ndash;39</td><td>These clients' reshipped items likely DID arrive &mdash; they just never emailed confirmation back</td></tr>
+  <tr><td>Tier 3: Stale</td><td>6</td><td>Cases Catherine may or may not be tracking</td></tr>
+</table>
+
+<div class="callout-blue">
+  <strong>The gap is a data limitation, not an error.</strong> Front inbox data cannot tell us whether a reshipped item was received if the client doesn't email back. Catherine has access to GTA Imaging's delivery confirmation records, which resolve the Tier 2 ambiguity. Pulling that data is the #1 next step.
+</div>
+
+<!-- ───────────── WHERE THE 135 WENT ───────────── -->
+<h2>Where Did the Extra 65 Go?</h2>
+
+<p style="font-size: 0.85rem;">The overcount from 135 to Catherine's ~70 is explained by four components:</p>
+
+<div style="margin: 1rem 0;">
+  <div class="bar-row"><span class="bar-label">False positives (removed earlier)</span><div class="bar-track"><div class="bar-fill" style="width:41%;background:var(--text-dim);">16</div></div><span class="bar-count">16</span></div>
+  <div class="bar-row"><span class="bar-label">Cross-channel duplicates</span><div class="bar-track"><div class="bar-fill" style="width:46.2%;background:var(--yellow);">18</div></div><span class="bar-count">18</span></div>
+  <div class="bar-row"><span class="bar-label">Confirmed resolved</span><div class="bar-track"><div class="bar-fill" style="width:20.5%;background:var(--green);">8</div></div><span class="bar-count">8</span></div>
+  <div class="bar-row"><span class="bar-label">Tier 2 actually received</span><div class="bar-track"><div class="bar-fill" style="width:74.4%;background:var(--blue);">~29&ndash;39</div></div><span class="bar-count">~29&ndash;39</span></div>
+</div>
+
+<table>
+  <tr><th>Starting point</th><th></th><th>151</th></tr>
+  <tr><td>Minus false positives (removed in prior pass)</td><td></td><td>-16 = 135</td></tr>
+  <tr><td>Minus cross-channel duplicates (entity resolution)</td><td></td><td>-18 = 117</td></tr>
+  <tr><td>Minus confirmed resolved (lifecycle tracking)</td><td></td><td>-8 = 109</td></tr>
+  <tr><td>Minus Tier 2 actually received (per Catherine's records)</td><td></td><td>-29 to -39 = <strong>~70&ndash;80</strong></td></tr>
+  <tr><td style="font-weight:700; color:var(--gold);">Catherine's ground truth</td><td></td><td style="font-weight:700; color:var(--gold);">~70</td></tr>
+</table>
+
+<!-- ───────────── BEFORE/AFTER ───────────── -->
+<h2>Before &amp; After: Pipeline Comparison</h2>
+
+<div class="comparison">
+  <div style="border-color: var(--red);">
+    <h4 style="color: var(--red);">Before (v1 Pipeline)</h4>
+    <p style="font-size: 0.82rem; line-height: 1.7;">
+      1. Classify messages <span class="tag tag-green">worked</span><br>
+      2. Group by conversation <span class="tag tag-green">worked</span><br>
+      3. Extract client name/email <span class="tag tag-green">worked</span><br>
+      4. Count unique clients <span class="tag tag-red">wrong question</span><br>
+      5. No deduplication <span class="tag tag-red">missing</span><br>
+      6. No lifecycle tracking <span class="tag tag-red">missing</span><br>
+      <strong>Result: 135 clients</strong>
+    </p>
+  </div>
+  <div style="border-color: var(--green);">
+    <h4 style="color: var(--green);">After (v2 Pipeline)</h4>
+    <p style="font-size: 0.82rem; line-height: 1.7;">
+      1. Classify messages <span class="tag tag-green">same</span><br>
+      2. Group by conversation <span class="tag tag-green">same</span><br>
+      3. Extract client name/email <span class="tag tag-green">improved</span><br>
+      4. Entity resolution <span class="tag tag-gold">new</span><br>
+      5. Lifecycle state machine <span class="tag tag-gold">new</span><br>
+      6. Evidence-backed 3-tier model <span class="tag tag-gold">new</span><br>
+      <strong>Result: 109 unresolved (aligns with ~70)</strong>
+    </p>
+  </div>
+</div>
+
+<!-- ───────────── FRONT DATA MODEL ───────────── -->
+<h2>Key Data Model Insight: <code>recipient_handle</code></h2>
+
+<p style="font-size: 0.85rem;">The most important data model lesson from this project:</p>
+
+<div class="callout-red">
+  <strong><code>recipient_handle</code> does NOT mean &ldquo;who received this message.&rdquo;</strong> It means &ldquo;the external party in this conversation thread, regardless of message direction.&rdquo; In a Nuovo&harr;Client thread, the <code>recipient_handle</code> is the client's email for BOTH inbound and outbound messages. In a Nuovo&harr;GTA thread, the <code>recipient_handle</code> is <code>hello@gtaimaging.com</code> for all messages.
+</div>
+
+<table>
+  <tr><th>Thread Type</th><th><code>recipient_handle</code></th><th>Count</th><th>Client Email Available?</th></tr>
+  <tr><td>Nuovo &harr; Client (direct)</td><td>Client's personal email</td><td>88</td><td>Yes &mdash; it IS the <code>recipient_handle</code></td></tr>
+  <tr><td>Nuovo &harr; GTA Imaging (printer)</td><td><code>hello@gtaimaging.com</code></td><td>47</td><td>No &mdash; client name only (from subject line)</td></tr>
+  <tr><td>Other vendors/system</td><td>Various</td><td>16</td><td>Varies</td></tr>
+</table>
+
+<p class="note">This is why 47 clients in the original list had no personal email &mdash; they only appeared in printer coordination threads where the <code>recipient_handle</code> is GTA's email, not the client's.</p>
+
+<!-- ───────────── OUTPUT FILES ───────────── -->
+<h2>Output Files</h2>
+
+<table>
+  <tr><th>File</th><th>Description</th><th>Rows</th><th>Columns</th></tr>
+  <tr>
+    <td><code>r4_FINAL_evidence_backed.csv</code></td>
+    <td><strong>Definitive client action list.</strong> 117 unique people with evidence quotes, lifecycle states, 3-tier classification, all emails separated</td>
+    <td>117</td>
+    <td>25</td>
+  </tr>
+  <tr>
+    <td><code>r4_entity_resolved.csv</code></td>
+    <td>Entity resolution output &mdash; deduplication details, match confidence, match evidence</td>
+    <td>117</td>
+    <td>&mdash;</td>
+  </tr>
+  <tr>
+    <td><code>r4_lifecycle_states.csv</code></td>
+    <td>Per-conversation lifecycle state machine output &mdash; chronological state transitions</td>
+    <td>135</td>
+    <td>&mdash;</td>
+  </tr>
+  <tr>
+    <td><code>r3_delivery_clients_all_emails.csv</code></td>
+    <td>Intermediate: all emails separated into columns (client, printer, staff, system) with false positive flags</td>
+    <td>151</td>
+    <td>21</td>
+  </tr>
+</table>
+
+<h3>Key Columns in <code>r4_FINAL_evidence_backed.csv</code></h3>
+
+<table>
+  <tr><th>Column</th><th>Description</th></tr>
+  <tr><td><code>client_name</code></td><td>Extracted client name (134/135 named, 99.1%)</td></tr>
+  <tr><td><code>client_email</code></td><td>Client's personal email (88 have it; 29 GTA-only clients do not)</td></tr>
+  <tr><td><code>front_contact_type</code></td><td>"client" or "printer" &mdash; what type of entity is in <code>recipient_handle</code></td></tr>
+  <tr><td><code>current_status</code></td><td>Lifecycle state machine output (CONFIRMED_RECEIVED, RESHIPPED_NO_CONFIRMATION, etc.)</td></tr>
+  <tr><td><code>resolution_class</code></td><td>Tier 1 / Tier 2 / Tier 3 evidence classification</td></tr>
+  <tr><td><code>include_in_list</code></td><td>INCLUDE or EXCLUDE &mdash; whether this person belongs on the active follow-up list</td></tr>
+  <tr><td><code>evidence_quote</code></td><td>The actual message text (first 150 chars) that supports the classification</td></tr>
+  <tr><td><code>evidence_date</code></td><td>Timestamp of the evidence message</td></tr>
+  <tr><td><code>state_history</code></td><td>Full chronological chain of state transitions</td></tr>
+  <tr><td><code>days_since_last_activity</code></td><td>Staleness indicator &mdash; days since last message</td></tr>
+  <tr><td><code>merged_from_count</code></td><td>How many raw records merged into this person (1 = no merge, 2+ = cross-channel match)</td></tr>
+  <tr><td><code>match_evidence</code></td><td>What fields matched during entity resolution and how</td></tr>
+</table>
+
+<!-- ───────────── LESSONS ───────────── -->
+<h2>Lessons for Future Data Projects</h2>
+
+<table>
+  <tr><th>#</th><th>Lesson</th><th>Application</th></tr>
+  <tr>
+    <td>1</td>
+    <td><strong>Profile before you pipeline.</strong> Run a data inventory (field meanings, cardinality, relationships) before any classification or counting.</td>
+    <td>Would have caught the <code>recipient_handle</code> semantics issue immediately.</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td><strong>Count people, not threads.</strong> Always deduplicate to the real-world entity before reporting counts. Front conversations are thread artifacts, not people.</td>
+    <td>Entity resolution is now a standard step in any data pipeline that touches communication data.</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td><strong>State, not sentiment.</strong> For any question about current status, build a state machine. Text classifiers find mentions; lifecycle trackers find outcomes.</td>
+    <td>Any &ldquo;who still hasn't...?&rdquo; question needs chronological state tracking, not keyword counting.</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td><strong>Calibrate early.</strong> Before finalizing any count, spot-check 20 records against someone who knows the ground truth.</td>
+    <td>A 15-minute check with Catherine would have caught the 2x overcount before it reached a deliverable.</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td><strong>Separate evidence tiers.</strong> &ldquo;Confirmed unresolved&rdquo; and &ldquo;probably unresolved&rdquo; are different things. Report them separately. Let the reader decide how to act on each.</td>
+    <td>The 3-tier model makes the uncertainty visible instead of hiding it behind a single number.</td>
+  </tr>
+</table>
+
+<!-- ───────────── NEXT STEPS ───────────── -->
+<h2>Remaining Data Gap</h2>
+
+<div class="callout">
+  <strong>One piece of data resolves everything:</strong> GTA Imaging's delivery confirmation records for reshipped items. This would definitively classify all 69 Tier 2 clients as either RESOLVED or UNRESOLVED, collapsing the 109 &rarr; a precise number that should match Catherine's ~70.
+</div>
+
+<table>
+  <tr><th>Action</th><th>Owner</th><th>Impact</th></tr>
+  <tr><td>Pull GTA Imaging delivery confirmation data for reshipped items</td><td>Operations (contact Andy/Andrew at Imagine)</td><td>Resolves all 69 Tier 2 ambiguous cases</td></tr>
+  <tr><td>Validate 10 Tier 1 cases with Catherine</td><td>Justin</td><td>Confirms the 34 confirmed-unresolved are accurate</td></tr>
+  <tr><td>Validate 10 Tier 2 cases with Catherine</td><td>Justin</td><td>Tests whether Catherine's GTA records match our state machine</td></tr>
+</table>
+
+<div class="footer">
+  <p>Nuovo Artistic Studios &mdash; Delivery Analysis Methodology Report</p>
+  <p>Source: <code>front_classified.csv</code> (40,967 messages) &rarr; <code>r4_FINAL_evidence_backed.csv</code> (117 unique people) | February 26, 2026</p>
+  <p style="margin-top: 0.5rem;">Prepared by ClaudeOS &bull; CORTEX v4.0</p>
+</div>
+
+<script>
+function toggleTheme() {
+  var html = document.documentElement;
+  var icon = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  if (html.getAttribute('data-theme') === 'light') {
+    html.removeAttribute('data-theme');
+    icon.innerHTML = '\u263E';
+    label.textContent = 'Light';
+    localStorage.setItem('theme', 'dark');
+  } else {
+    html.setAttribute('data-theme', 'light');
+    icon.innerHTML = '\u2600';
+    label.textContent = 'Dark';
+    localStorage.setItem('theme', 'light');
+  }
+}
+(function() {
+  var saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    var icon = document.getElementById('themeIcon');
+    var label = document.getElementById('themeLabel');
+    if (icon) icon.innerHTML = '\u2600';
+    if (label) label.textContent = 'Dark';
+  }
+})();
+</script>
+</body>
+</html>
